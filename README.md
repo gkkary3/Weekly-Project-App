@@ -14,7 +14,8 @@
 
 ## 이미지
 
-![image](https://github.com/user-attachments/assets/6880608f-4ce1-4735-8abb-70f946ee328d)
+![image](https://github.com/user-attachments/assets/617125de-cee4-4538-a421-fe1161e39042)
+
 
 > (위 이미지는 앱의 첫 화면을 보여주는 스크린샷입니다.)
 
