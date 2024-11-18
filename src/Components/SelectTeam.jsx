@@ -10,6 +10,7 @@ export default function SelectTeam() {
   const [teamData, setTeamData] = useState({ ...teamsData });
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalType, setModalType] = useState(""); // 모달 타입: "team" or "user"
+  const [emailIsInvalid, setEmailIsInvalid] = useState();
 
   const assignTeam = useRef();
   const assignUserName = useRef();
@@ -53,6 +54,7 @@ export default function SelectTeam() {
 
   const handleCloseModal = () => {
     setModalIsOpen(false);
+    setEmailIsInvalid(false);
     setModalType("");
   };
 
@@ -71,6 +73,11 @@ export default function SelectTeam() {
     const userName = assignUserName.current.value;
     const userEmail = assignUserEmail.current.value;
 
+    const emailIsvalid = userEmail.includes("@");
+    if (!emailIsvalid) {
+      setEmailIsInvalid(true);
+      return;
+    }
     if (!userName.trim() || !userEmail.trim()) {
       alert("사용자 이름과 이메일을 모두 입력해주세요.");
       return;
@@ -102,7 +109,7 @@ export default function SelectTeam() {
         },
       };
     });
-
+    setEmailIsInvalid(false);
     handleCloseModal();
   };
 
@@ -143,6 +150,13 @@ export default function SelectTeam() {
             className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             ref={assignUserEmail}
           />
+          <div className="control-error">
+            {emailIsInvalid && (
+              <p className="mb-3 text-sm text-red-500">
+                유효한 이메일 주소를 입력해주세요.
+              </p>
+            )}
+          </div>
           <button
             onClick={handleAddUser}
             className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
