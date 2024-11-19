@@ -81,6 +81,11 @@ export default function SelectTeam() {
 
   const handleAddTeam = () => {
     var teamName = assignTeam.current.value;
+
+    if (teamName.trim().length === 0) {
+      alert("팀 이름을 확인해 주세요.");
+      return;
+    }
     const newTeamKey = `team-${uuidv4()}`;
     // setTeamData((teamData[newTeamKey] = { name: teamName, users: {} }));
     setTeamData((prevData) => ({
