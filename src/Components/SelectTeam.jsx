@@ -5,9 +5,15 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function SelectTeam() {
   const [selectedTeam, setSelectedTeam] = useState("");
-  const [selectedName, setSelectedName] = useState("");
+  const [selectedUser, setSelectedUser] = useState({
+    name: "",
+    email: "",
+  });
   const [userOptions, setUserOptions] = useState([]);
-  const [teamData, setTeamData] = useState({ ...teamsData });
+  const [teamData, setTeamData] = useState(() => {
+    const teamData = window.localStorage.getItem("teamData");
+    return teamData ? JSON.parse(teamData) : { ...teamsData };
+  });
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalType, setModalType] = useState(""); // 모달 타입: "team" or "user"
   const [emailIsInvalid, setEmailIsInvalid] = useState();
@@ -24,22 +30,37 @@ export default function SelectTeam() {
     }
   }, [teamData, selectedTeam]); // teamData나 selectedTeam이 변경될 때마다 실행
 
+  useEffect(() => {
+    window.localStorage.setItem("teamData", JSON.stringify(teamData));
+  }, [teamData]);
+
   const handleNameChange = (event) => {
-    setSelectedName(event.target.value);
+    var userEmail = event.target.value;
+    var selectedUser = userOptions.find((user) => user.email === userEmail);
+    setSelectedUser((prevSelectedUser) => ({
+      ...prevSelectedUser,
+      name: selectedUser.name,
+      email: selectedUser.email,
+    }));
   };
 
   const handleSubmit = () => {
-    if (!selectedTeam || !selectedName) {
+    if (!selectedTeam || !selectedUser) {
       alert("팀과 이름을 모두 선택해주세요.");
     } else {
-      alert(`팀: ${teamData[selectedTeam].name}, 이름: ${selectedName}`);
+      alert(
+        `팀: ${teamData[selectedTeam].name}, 이름: ${selectedUser.name}(${selectedUser.email})`
+      );
     }
   };
 
   const handleTeamChange = (event) => {
     const team = event.target.value;
     setSelectedTeam(team);
-    setSelectedName("");
+    setSelectedUser({
+      name: "",
+      email: "",
+    });
     if (team && teamData[team]) {
       setUserOptions(Object.values(teamData[team].users));
     } else {
@@ -218,14 +239,14 @@ export default function SelectTeam() {
             <select
               id="name"
               name="name"
-              value={selectedName}
+              value={selectedUser.email}
               onChange={handleNameChange}
               className="w-full p-2 mt-2 text-white bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               disabled={!selectedTeam}
             >
               <option value="">이름을 선택하세요</option>
               {userOptions.map((user) => (
-                <option key={user.email} id={user.email} value={user.name}>
+                <option key={user.email} id={user.email} value={user.email}>
                   {user.name} ({user.email})
                 </option>
               ))}
