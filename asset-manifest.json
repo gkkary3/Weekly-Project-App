@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/gkkary3/Weekly-Project-App.git/static/css/main.032c8abb.css",
+    "main.js": "/gkkary3/Weekly-Project-App.git/static/js/main.968321a5.js",
+    "static/js/453.ed3810f9.chunk.js": "/gkkary3/Weekly-Project-App.git/static/js/453.ed3810f9.chunk.js",
+    "index.html": "/gkkary3/Weekly-Project-App.git/index.html",
+    "main.032c8abb.css.map": "/gkkary3/Weekly-Project-App.git/static/css/main.032c8abb.css.map",
+    "main.968321a5.js.map": "/gkkary3/Weekly-Project-App.git/static/js/main.968321a5.js.map",
+    "453.ed3810f9.chunk.js.map": "/gkkary3/Weekly-Project-App.git/static/js/453.ed3810f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.032c8abb.css",
+    "static/js/main.968321a5.js"
+  ]
+}
