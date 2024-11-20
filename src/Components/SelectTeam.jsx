@@ -9,6 +9,16 @@ export default function SelectTeam() {
     name: "",
     email: "",
   });
+  const [submitTeam, setSubmitTeam] = useState({
+    team: {
+      name: "",
+      id: "",
+    },
+    userInfo: {
+      name: "",
+      email: "",
+    },
+  });
   const [userOptions, setUserOptions] = useState([]);
   const [teamData, setTeamData] = useState(() => {
     const teamData = window.localStorage.getItem("teamData");
@@ -17,6 +27,10 @@ export default function SelectTeam() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalType, setModalType] = useState(""); // 모달 타입: "team" or "user"
   const [emailIsInvalid, setEmailIsInvalid] = useState();
+  const [actionButtonsVisible, setActionButtonsVisible] = useState({
+    team: false,
+    user: false,
+  });
 
   const assignTeam = useRef();
   const assignUserName = useRef();
@@ -34,13 +48,17 @@ export default function SelectTeam() {
     window.localStorage.setItem("teamData", JSON.stringify(teamData));
   }, [teamData]);
 
+  useEffect(() => {
+    window.localStorage.setItem("submitTeam", JSON.stringify(submitTeam));
+  }, [submitTeam]);
+
   const handleNameChange = (event) => {
     var userEmail = event.target.value;
     var selectedUser = userOptions.find((user) => user.email === userEmail);
     setSelectedUser((prevSelectedUser) => ({
       ...prevSelectedUser,
-      name: selectedUser.name,
-      email: selectedUser.email,
+      name: selectedUser ? selectedUser.name : "",
+      email: selectedUser ? selectedUser.email : "",
     }));
   };
 
@@ -48,9 +66,17 @@ export default function SelectTeam() {
     if (!selectedTeam || !selectedUser) {
       alert("팀과 이름을 모두 선택해주세요.");
     } else {
-      alert(
-        `팀: ${teamData[selectedTeam].name}, 이름: ${selectedUser.name}(${selectedUser.email})`
-      );
+      setSubmitTeam((prevSubmitTeam) => ({
+        ...prevSubmitTeam,
+        team: {
+          name: teamData[selectedTeam].name,
+          id: selectedTeam,
+        },
+        userInfo: {
+          name: selectedUser.name,
+          email: selectedUser.email,
+        },
+      }));
     }
   };
 
@@ -71,6 +97,7 @@ export default function SelectTeam() {
   const handleOpenModal = (type) => {
     setModalType(type);
     setModalIsOpen(true);
+    setActionButtonsVisible(false);
   };
 
   const handleCloseModal = () => {
@@ -195,11 +222,19 @@ export default function SelectTeam() {
     return null;
   };
 
+  // toggleActionButtons 함수 수정
+  const toggleActionButtons = (type) => {
+    setActionButtonsVisible((prevState) => ({
+      ...prevState,
+      [type]: !prevState[type],
+    }));
+  };
+
   return (
     <div className="flex items-center justify-center h-screen bg-gray-900">
       <div className="w-full max-w-md p-8 bg-gray-800 rounded-lg shadow-xl">
         <h1 className="mb-6 text-3xl font-semibold text-center text-blue-400">
-          주간 보고 프로젝트
+          팀 주간 보고
         </h1>
 
         <div className="flex items-center mb-4">
@@ -225,12 +260,31 @@ export default function SelectTeam() {
               ))}
             </select>
           </div>
-          <button
-            onClick={() => handleOpenModal("team")}
-            className="ml-4 mt-8 p-2 h-[42px] bg-gray-700 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center"
-          >
-            +
-          </button>
+
+          <div className="relative inline-block">
+            <button
+              onClick={() => toggleActionButtons("team")}
+              className="ml-4 mt-8 p-2 h-[42px] bg-gray-700 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center"
+            >
+              +
+            </button>
+            {actionButtonsVisible.team && (
+              <div className="absolute right-0 flex p-2 mb-2 space-x-2 bg-transparent rounded-md bottom-8">
+                <button
+                  onClick={handleOpenModal.bind(null, "team")}
+                  className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
+                >
+                  추가
+                </button>
+                <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
+                  수정
+                </button>
+                <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
+                  삭제
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center mb-6">
@@ -257,13 +311,30 @@ export default function SelectTeam() {
               ))}
             </select>
           </div>
-          <button
-            onClick={() => handleOpenModal("user")}
-            className="ml-4 mt-8 p-2 h-[42px] bg-gray-700 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center"
-            disabled={!selectedTeam}
-          >
-            +
-          </button>
+          <div className="relative inline-block">
+            <button
+              onClick={() => toggleActionButtons("user")}
+              className="ml-4 mt-8 p-2 h-[42px] bg-gray-700 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center"
+            >
+              +
+            </button>
+            {actionButtonsVisible.user && (
+              <div className="absolute right-0 flex p-2 mb-2 space-x-2 bg-transparent rounded-md bottom-8">
+                <button
+                  onClick={handleOpenModal.bind(null, "user")}
+                  className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
+                >
+                  추가
+                </button>
+                <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
+                  수정
+                </button>
+                <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
+                  삭제
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex justify-center">
