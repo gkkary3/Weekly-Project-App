@@ -25,7 +25,7 @@ export default function SelectTeam() {
     return teamData ? JSON.parse(teamData) : { ...teamsData };
   });
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalType, setModalType] = useState(""); // 모달 타입: "team" or "user"
+  const [modalType, setModalType] = useState({ type: "", action: "" }); // type: team/user  , action: add, update, delete
   const [emailIsInvalid, setEmailIsInvalid] = useState();
   const [actionButtonsVisible, setActionButtonsVisible] = useState({
     team: false,
@@ -94,8 +94,14 @@ export default function SelectTeam() {
     }
   };
 
-  const handleOpenModal = (type) => {
-    setModalType(type);
+  const handleOpenModal = (type, action) => {
+    if (action === "update" && (!selectedTeam || !selectedUser)) {
+      type === "team"
+        ? alert("팀을 선택해주세요.")
+        : alert("이름을 선택해주세요.");
+      return;
+    }
+    setModalType((prevData) => ({ ...prevData, type, action }));
     setModalIsOpen(true);
     setActionButtonsVisible((prevData) => ({ ...prevData, [type]: false }));
   };
@@ -103,7 +109,7 @@ export default function SelectTeam() {
   const handleCloseModal = () => {
     setModalIsOpen(false);
     setEmailIsInvalid(false);
-    setModalType("");
+    setModalType({ type: "", action: "" });
   };
 
   const handleAddTeam = () => {
@@ -121,6 +127,8 @@ export default function SelectTeam() {
     }));
     handleCloseModal();
   };
+
+  const handleUpdateTeam = () => {};
 
   const handleAddUser = () => {
     const userName = assignUserName.current.value;
@@ -166,58 +174,77 @@ export default function SelectTeam() {
     handleCloseModal();
   };
 
+  function handleInputChange(type, value, identifier) {
+    setTeamData((prevData) => ({
+      ...prevData, // 기존 데이터 유지
+      [identifier]: {
+        ...prevData[identifier], // 기존 데이터 유지
+        name: value, // name만 업데이트
+      },
+    }));
+  }
+
   const renderModalContent = () => {
-    if (modalType === "team") {
-      return (
-        <div>
-          <h2 className="mb-4 text-lg font-semibold text-blue-400">팀 추가</h2>
-          <input
-            type="text"
-            placeholder="새 팀 이름을 입력하세요"
-            className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-            ref={assignTeam}
-          />
-          <button
-            onClick={handleAddTeam}
-            className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            추가
-          </button>
-        </div>
-      );
-    } else if (modalType === "user") {
-      return (
-        <div>
-          <h2 className="mb-4 text-lg font-semibold text-blue-400">
-            사용자 추가
-          </h2>
-          <input
-            type="text"
-            placeholder="새 사용자 이름을 입력하세요"
-            className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-            ref={assignUserName}
-          />
-          <input
-            type="email"
-            placeholder="이메일을 입력하세요"
-            className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-            ref={assignUserEmail}
-          />
-          <div className="control-error">
-            {emailIsInvalid && (
-              <p className="mb-3 text-sm text-red-500">
-                유효한 이메일 주소를 입력해주세요.
-              </p>
-            )}
+    const { type, action } = modalType;
+    if (action === "add" || action === "update") {
+      if (type === "team") {
+        return (
+          <div>
+            <h2 className="mb-4 text-lg font-semibold text-blue-400">
+              {action === "add" ? "팀 추가" : "팀 수정"}
+            </h2>
+            <input
+              type="text"
+              value={action === "update" ? teamData[selectedTeam].name : ""}
+              onChange={(e) =>
+                handleInputChange("team", e.target.value, selectedTeam)
+              }
+              placeholder="새 팀 이름을 입력하세요"
+              className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              ref={assignTeam}
+            />
+            <button
+              onClick={action === "add" ? handleAddTeam : handleUpdateTeam}
+              className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              {action === "add" ? "추가" : "수정"}
+            </button>
           </div>
-          <button
-            onClick={handleAddUser}
-            className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            추가
-          </button>
-        </div>
-      );
+        );
+      } else if (type === "user") {
+        return (
+          <div>
+            <h2 className="mb-4 text-lg font-semibold text-blue-400">
+              사용자 추가
+            </h2>
+            <input
+              type="text"
+              placeholder="새 사용자 이름을 입력하세요"
+              className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              ref={assignUserName}
+            />
+            <input
+              type="email"
+              placeholder="이메일을 입력하세요"
+              className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              ref={assignUserEmail}
+            />
+            <div className="control-error">
+              {emailIsInvalid && (
+                <p className="mb-3 text-sm text-red-500">
+                  유효한 이메일 주소를 입력해주세요.
+                </p>
+              )}
+            </div>
+            <button
+              onClick={handleAddUser}
+              className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              추가
+            </button>
+          </div>
+        );
+      }
     }
     return null;
   };
@@ -244,13 +271,21 @@ export default function SelectTeam() {
             <button
               onClick={handleOpenModal.bind(
                 null,
-                actionButtonsVisible.user ? "user" : "team"
+                actionButtonsVisible.user ? "user" : "team",
+                "add"
               )}
               className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
             >
               추가
             </button>
-            <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
+            <button
+              onClick={handleOpenModal.bind(
+                null,
+                actionButtonsVisible.user ? "user" : "team",
+                "update"
+              )}
+              className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
+            >
               수정
             </button>
             <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
