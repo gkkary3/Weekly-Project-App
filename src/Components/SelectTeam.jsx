@@ -97,7 +97,7 @@ export default function SelectTeam() {
   const handleOpenModal = (type) => {
     setModalType(type);
     setModalIsOpen(true);
-    setActionButtonsVisible(false);
+    setActionButtonsVisible((prevData) => ({ ...prevData, [type]: false }));
   };
 
   const handleCloseModal = () => {
@@ -224,10 +224,13 @@ export default function SelectTeam() {
 
   // toggleActionButtons 함수 수정
   const toggleActionButtons = (type) => {
-    setActionButtonsVisible((prevState) => ({
-      ...prevState,
-      [type]: !prevState[type],
-    }));
+    setActionButtonsVisible((prevState) => {
+      const updatedState = Object.keys(prevState).reduce((acc, key) => {
+        acc[key] = key === type ? !prevState[key] : false;
+        return acc;
+      }, {});
+      return updatedState;
+    });
   };
 
   return (
@@ -236,7 +239,25 @@ export default function SelectTeam() {
         <h1 className="mb-6 text-3xl font-semibold text-center text-blue-400">
           팀 주간 보고
         </h1>
-
+        {(actionButtonsVisible.team || actionButtonsVisible.user) && (
+          <div className="flex justify-end space-x-2 bg-transparent rounded-md">
+            <button
+              onClick={handleOpenModal.bind(
+                null,
+                actionButtonsVisible.user ? "user" : "team"
+              )}
+              className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
+            >
+              추가
+            </button>
+            <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
+              수정
+            </button>
+            <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
+              삭제
+            </button>
+          </div>
+        )}
         <div className="flex items-center mb-4">
           <div className="flex-grow">
             <label
@@ -268,7 +289,7 @@ export default function SelectTeam() {
             >
               +
             </button>
-            {actionButtonsVisible.team && (
+            {/* {actionButtonsVisible.team && (
               <div className="absolute right-0 flex p-2 mb-2 space-x-2 bg-transparent rounded-md bottom-8">
                 <button
                   onClick={handleOpenModal.bind(null, "team")}
@@ -283,7 +304,7 @@ export default function SelectTeam() {
                   삭제
                 </button>
               </div>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -318,7 +339,7 @@ export default function SelectTeam() {
             >
               +
             </button>
-            {actionButtonsVisible.user && (
+            {/* {actionButtonsVisible.user && (
               <div className="absolute right-0 flex p-2 mb-2 space-x-2 bg-transparent rounded-md bottom-8">
                 <button
                   onClick={handleOpenModal.bind(null, "user")}
@@ -333,7 +354,7 @@ export default function SelectTeam() {
                   삭제
                 </button>
               </div>
-            )}
+            )} */}
           </div>
         </div>
 
