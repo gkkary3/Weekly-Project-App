@@ -31,6 +31,7 @@ export default function SelectTeam() {
     team: false,
     user: false,
   });
+  const [previousTeamData, setPreviousTeamData] = useState({ ...teamData });
 
   const assignTeam = useRef();
   const assignUserName = useRef();
@@ -107,6 +108,9 @@ export default function SelectTeam() {
   };
 
   const handleCloseModal = () => {
+    if (modalType.type === "team") {
+      setTeamData({ ...previousTeamData });
+    }
     setModalIsOpen(false);
     setEmailIsInvalid(false);
     setModalType({ type: "", action: "" });
@@ -128,7 +132,19 @@ export default function SelectTeam() {
     handleCloseModal();
   };
 
-  const handleUpdateTeam = () => {};
+  const handleUpdateTeam = () => {
+    handleCloseModal();
+  };
+
+  const handleDeleteData = (type) => {
+    if (
+      selectedTeam &&
+      type === "team" &&
+      teamData[selectedTeam].user.length > 0
+    ) {
+      alert("사용자가 존재합니다.");
+    }
+  };
 
   const handleAddUser = () => {
     const userName = assignUserName.current.value;
@@ -175,6 +191,7 @@ export default function SelectTeam() {
   };
 
   function handleInputChange(type, value, identifier) {
+    setPreviousTeamData(teamData); // 상태 변경 전에 이전 상태 저장
     setTeamData((prevData) => ({
       ...prevData, // 기존 데이터 유지
       [identifier]: {
@@ -195,13 +212,15 @@ export default function SelectTeam() {
             </h2>
             <input
               type="text"
-              value={action === "update" ? teamData[selectedTeam].name : ""}
               onChange={(e) =>
                 handleInputChange("team", e.target.value, selectedTeam)
               }
               placeholder="새 팀 이름을 입력하세요"
               className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               ref={assignTeam}
+              {...(action === "update" && {
+                value: teamData[selectedTeam].name,
+              })}
             />
             <button
               onClick={action === "add" ? handleAddTeam : handleUpdateTeam}
@@ -251,6 +270,10 @@ export default function SelectTeam() {
 
   // toggleActionButtons 함수 수정
   const toggleActionButtons = (type) => {
+    if (type === "user" && !selectedTeam) {
+      alert("팀을 선태해주세요.");
+      return;
+    }
     setActionButtonsVisible((prevState) => {
       const updatedState = Object.keys(prevState).reduce((acc, key) => {
         acc[key] = key === type ? !prevState[key] : false;
@@ -288,7 +311,10 @@ export default function SelectTeam() {
             >
               수정
             </button>
-            <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
+            <button
+              onClick={handleDeleteData("team")}
+              className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
+            >
               삭제
             </button>
           </div>
@@ -324,22 +350,6 @@ export default function SelectTeam() {
             >
               +
             </button>
-            {/* {actionButtonsVisible.team && (
-              <div className="absolute right-0 flex p-2 mb-2 space-x-2 bg-transparent rounded-md bottom-8">
-                <button
-                  onClick={handleOpenModal.bind(null, "team")}
-                  className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
-                >
-                  추가
-                </button>
-                <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
-                  수정
-                </button>
-                <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
-                  삭제
-                </button>
-              </div>
-            )} */}
           </div>
         </div>
 
@@ -374,22 +384,6 @@ export default function SelectTeam() {
             >
               +
             </button>
-            {/* {actionButtonsVisible.user && (
-              <div className="absolute right-0 flex p-2 mb-2 space-x-2 bg-transparent rounded-md bottom-8">
-                <button
-                  onClick={handleOpenModal.bind(null, "user")}
-                  className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
-                >
-                  추가
-                </button>
-                <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
-                  수정
-                </button>
-                <button className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
-                  삭제
-                </button>
-              </div>
-            )} */}
           </div>
         </div>
 
