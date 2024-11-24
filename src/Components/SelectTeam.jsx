@@ -31,7 +31,6 @@ export default function SelectTeam() {
     team: false,
     user: false,
   });
-  const [previousTeamData, setPreviousTeamData] = useState({ ...teamData });
 
   const assignTeam = useRef();
   const assignUserName = useRef();
@@ -108,9 +107,6 @@ export default function SelectTeam() {
   };
 
   const handleCloseModal = () => {
-    if (modalType.type === "team") {
-      setTeamData({ ...previousTeamData });
-    }
     setModalIsOpen(false);
     setEmailIsInvalid(false);
     setModalType({ type: "", action: "" });
@@ -132,7 +128,15 @@ export default function SelectTeam() {
     handleCloseModal();
   };
 
-  const handleUpdateTeam = () => {
+  const handleUpdateTeam = (identifier) => {
+    const teamName = assignTeam.current.value;
+    setTeamData((prevData) => ({
+      ...prevData,
+      [identifier]: {
+        ...prevData[identifier],
+        name: teamName, // 팀 이름 업데이트
+      },
+    }));
     handleCloseModal();
   };
 
@@ -140,7 +144,7 @@ export default function SelectTeam() {
     if (
       selectedTeam &&
       type === "team" &&
-      teamData[selectedTeam].user.length > 0
+      teamData[selectedTeam].users !== null
     ) {
       alert("사용자가 존재합니다.");
     }
@@ -190,16 +194,12 @@ export default function SelectTeam() {
     handleCloseModal();
   };
 
-  function handleInputChange(type, value, identifier) {
-    setPreviousTeamData(teamData); // 상태 변경 전에 이전 상태 저장
-    setTeamData((prevData) => ({
-      ...prevData, // 기존 데이터 유지
-      [identifier]: {
-        ...prevData[identifier], // 기존 데이터 유지
-        name: value, // name만 업데이트
-      },
-    }));
-  }
+  // function handleInputChange(type, value) {
+  //   if (type === "team" && assignTeam.current) {
+  //     // 현재 ref의 value 값을 가져오거나 변경
+  //     assignTeam.current.value = assignTeam.current.value;
+  //   }
+  // }
 
   const renderModalContent = () => {
     const { type, action } = modalType;
@@ -212,18 +212,20 @@ export default function SelectTeam() {
             </h2>
             <input
               type="text"
-              onChange={(e) =>
-                handleInputChange("team", e.target.value, selectedTeam)
-              }
+              // onChange={(e) => handleInputChange("team", e.target.value)}
               placeholder="새 팀 이름을 입력하세요"
               className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               ref={assignTeam}
               {...(action === "update" && {
-                value: teamData[selectedTeam].name,
+                defaultValue: teamData[selectedTeam].name,
               })}
             />
             <button
-              onClick={action === "add" ? handleAddTeam : handleUpdateTeam}
+              onClick={
+                action === "add"
+                  ? () => handleAddTeam()
+                  : () => handleUpdateTeam(selectedTeam)
+              }
               className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               {action === "add" ? "추가" : "수정"}
@@ -312,7 +314,7 @@ export default function SelectTeam() {
               수정
             </button>
             <button
-              onClick={handleDeleteData("team")}
+              onClick={() => handleDeleteData("team")}
               className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
             >
               삭제
