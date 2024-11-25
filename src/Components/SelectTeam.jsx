@@ -77,6 +77,16 @@ export default function SelectTeam() {
           email: selectedUser.email,
         },
       }));
+
+      alert(
+        "팀 이름:" +
+          submitTeam.team.name +
+          ", 이름: " +
+          submitTeam.userInfo.name +
+          "(" +
+          submitTeam.userInfo.email +
+          ")"
+      );
     }
   };
 
@@ -95,7 +105,10 @@ export default function SelectTeam() {
   };
 
   const handleOpenModal = (type, action) => {
-    if (action === "update" && (!selectedTeam || !selectedUser)) {
+    if (
+      (action === "update" && type === "team" && !selectedTeam) ||
+      (action === "update" && type === "user" && !selectedUser.email)
+    ) {
       type === "team"
         ? alert("팀을 선택해주세요.")
         : alert("이름을 선택해주세요.");
@@ -128,25 +141,81 @@ export default function SelectTeam() {
     handleCloseModal();
   };
 
-  const handleUpdateTeam = (identifier) => {
-    const teamName = assignTeam.current.value;
-    setTeamData((prevData) => ({
-      ...prevData,
-      [identifier]: {
-        ...prevData[identifier],
-        name: teamName, // 팀 이름 업데이트
-      },
-    }));
+  const handleUpdateData = (identifier, type) => {
+    if (type === "team") {
+      const teamName = assignTeam.current.value;
+      setTeamData((prevData) => ({
+        ...prevData,
+        [identifier]: {
+          ...prevData[identifier],
+          name: teamName, // 팀 이름 업데이트
+        },
+      }));
+    } else if (type === "user") {
+      const userName = assignUserName.current.value;
+      const userEmail = assignUserEmail.current.value;
+
+      setTeamData((prevData) => {
+        const oldKey = identifier.email.split("@")[0];
+        const newKey = userEmail.split("@")[0];
+
+        const updatedUsers = { ...prevData[selectedTeam].users };
+
+        // 이메일이 변경되었는지 확인
+        if (oldKey === newKey) {
+          // 이메일이 동일한 경우: 키 유지, 값만 업데이트
+          updatedUsers[oldKey] = {
+            ...updatedUsers[oldKey],
+            name: userName,
+            email: userEmail, // 혹시 이메일 필드도 업데이트 필요하다면 포함
+          };
+        } else {
+          // 이메일이 변경된 경우: 기존 키 삭제, 새 키 추가
+          delete updatedUsers[oldKey];
+          updatedUsers[newKey] = {
+            name: userName,
+            email: userEmail,
+          };
+        }
+
+        return {
+          ...prevData,
+          [selectedTeam]: {
+            ...prevData[selectedTeam],
+            users: updatedUsers,
+          },
+        };
+      });
+    }
+
     handleCloseModal();
   };
 
   const handleDeleteData = (type) => {
-    if (
-      selectedTeam &&
-      type === "team" &&
-      teamData[selectedTeam].users !== null
-    ) {
-      alert("사용자가 존재합니다.");
+    if (selectedTeam && type === "team") {
+      if (Object.keys(teamData[selectedTeam].users).length > 0) {
+        alert("사용자가 존재합니다.");
+      } else {
+        setTeamData((prevData) => {
+          const updateDate = { ...prevData };
+          delete updateDate[selectedTeam];
+          return updateDate;
+        });
+      }
+    } else if (selectedTeam && selectedUser.email && type === "user") {
+      setTeamData((prevData) => {
+        const updatedUsers = { ...prevData[selectedTeam].users };
+        const userKey = selectedUser.email.split("@")[0];
+        delete updatedUsers[userKey];
+        // 상위 teamData에 반영
+        return {
+          ...prevData,
+          [selectedTeam]: {
+            ...prevData[selectedTeam],
+            users: updatedUsers,
+          },
+        };
+      });
     }
   };
 
@@ -170,6 +239,7 @@ export default function SelectTeam() {
     }
 
     const userKey = userEmail.split("@")[0]; // 이메일에서 @ 기준으로 왼쪽 추출
+    // const userKey = userEmail; // 이메일에서 @ 기준으로 왼쪽 추출
 
     setTeamData((prevData) => {
       // 중복 사용자 확인
@@ -224,7 +294,7 @@ export default function SelectTeam() {
               onClick={
                 action === "add"
                   ? () => handleAddTeam()
-                  : () => handleUpdateTeam(selectedTeam)
+                  : () => handleUpdateData(selectedTeam, type)
               }
               className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
@@ -236,19 +306,29 @@ export default function SelectTeam() {
         return (
           <div>
             <h2 className="mb-4 text-lg font-semibold text-blue-400">
-              사용자 추가
+              {action === "add" ? "사용자 추가" : "사용자 수정"}
             </h2>
             <input
               type="text"
               placeholder="새 사용자 이름을 입력하세요"
               className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               ref={assignUserName}
+              {...(action === "update" && {
+                defaultValue:
+                  teamData[selectedTeam].users[selectedUser.email.split("@")[0]]
+                    .name,
+              })}
             />
             <input
               type="email"
               placeholder="이메일을 입력하세요"
               className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               ref={assignUserEmail}
+              {...(action === "update" && {
+                defaultValue:
+                  teamData[selectedTeam].users[selectedUser.email.split("@")[0]]
+                    .email,
+              })}
             />
             <div className="control-error">
               {emailIsInvalid && (
@@ -258,10 +338,14 @@ export default function SelectTeam() {
               )}
             </div>
             <button
-              onClick={handleAddUser}
+              onClick={
+                action === "add"
+                  ? () => handleAddUser()
+                  : () => handleUpdateData(selectedUser, type)
+              }
               className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
-              추가
+              {action === "add" ? "추가" : "수정"}
             </button>
           </div>
         );
@@ -314,7 +398,9 @@ export default function SelectTeam() {
               수정
             </button>
             <button
-              onClick={() => handleDeleteData("team")}
+              onClick={() =>
+                handleDeleteData(actionButtonsVisible.user ? "user" : "team")
+              }
               className="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap"
             >
               삭제
