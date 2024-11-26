@@ -7,7 +7,7 @@ import Header from "./components/Header.jsx";
 function App() {
   const [teamSubmitData, setTeamSubmitData] = useState(false);
   const [submitTeamData, setSubmitTeamData] = useState(null);
-  // const [teamIsSubmit, setTeamIsSubmit] = useState(false);
+  const [teamIsSubmit, setTeamIsSubmit] = useState(false);
 
   useEffect(() => {
     const data = window.localStorage.getItem("submitTeam");
@@ -19,9 +19,10 @@ function App() {
 
   const handleTeamSubmit = (submitTeam) => {
     setSubmitTeamData(submitTeam);
+    setTeamIsSubmit(true);
   };
 
-  return teamSubmitData ? (
+  return teamSubmitData && teamIsSubmit && submitTeamData.team.name ? (
     <Header submitTeamData={submitTeamData} />
   ) : (
     <SelectTeam handleTeamSubmit={handleTeamSubmit} />
