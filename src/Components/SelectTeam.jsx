@@ -3,7 +3,7 @@ import teamsData from "../resource/data.js";
 import Modal from "./Modal.jsx";
 import { v4 as uuidv4 } from "uuid";
 
-export default function SelectTeam() {
+export default function SelectTeam({ handleTeamSubmit }) {
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedUser, setSelectedUser] = useState({
     name: "",
@@ -49,8 +49,12 @@ export default function SelectTeam() {
   }, [teamData]);
 
   useEffect(() => {
-    window.localStorage.setItem("submitTeam", JSON.stringify(submitTeam));
-  }, [submitTeam]);
+    if (submitTeam.team.name || submitTeam.userInfo.name) {
+      window.localStorage.setItem("submitTeam", JSON.stringify(submitTeam));
+
+      handleTeamSubmit(submitTeam);
+    }
+  }, [submitTeam, handleTeamSubmit]);
 
   const handleNameChange = (event) => {
     var userEmail = event.target.value;
@@ -63,7 +67,7 @@ export default function SelectTeam() {
   };
 
   const handleSubmit = () => {
-    if (!selectedTeam || !selectedUser) {
+    if (!selectedTeam || !selectedUser.email) {
       alert("팀과 이름을 모두 선택해주세요.");
     } else {
       setSubmitTeam((prevSubmitTeam) => ({
@@ -77,16 +81,6 @@ export default function SelectTeam() {
           email: selectedUser.email,
         },
       }));
-
-      alert(
-        "팀 이름:" +
-          submitTeam.team.name +
-          ", 이름: " +
-          submitTeam.userInfo.name +
-          "(" +
-          submitTeam.userInfo.email +
-          ")"
-      );
     }
   };
 
