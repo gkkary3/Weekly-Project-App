@@ -21,7 +21,7 @@ export default function Header({ submitTeamData, handleHeight }) {
     if (assignHeight.current) {
       setHeaderHeight(assignHeight.current.offsetHeight);
     }
-  }, [currentTime]); // DOM 렌더링 완료 후 실행
+  }, [currentTime]);
 
   useEffect(() => {
     const updateHeaderHeight = () => {
@@ -47,26 +47,22 @@ export default function Header({ submitTeamData, handleHeight }) {
       ref={assignHeight}
       className="fixed top-0 left-0 z-50 w-full text-white bg-gray-800 shadow-md"
     >
-      <div className="flex flex-col items-center justify-between max-w-screen-lg p-4 mx-auto md:flex-row">
+      <div className="relative flex items-start justify-between p-4 mx-auto">
         {/* 팀 정보 */}
-        <div className="text-center md:text-left">
+        <div className="mt-2 text-left">
           <h1 className="text-xl font-bold text-blue-400">
             {submitTeamData.team.name}
           </h1>
-          <p className="text-sm text-gray-300">
-            사용자:{" "}
-            <span className="font-medium">{submitTeamData.userInfo.name}</span>
-          </p>
-          <p className="text-sm text-gray-300">
-            이메일:{" "}
-            <span className="font-medium">{submitTeamData.userInfo.email}</span>
+          <p className="text-sm text-white">
+            <span className="font-semibold">
+              {submitTeamData.userInfo.name}({submitTeamData.userInfo.email})
+            </span>
           </p>
         </div>
 
         {/* 현재 시간 */}
-        <div className="w-full mt-6 text-center md:mt-0 md:absolute md:bottom-2 md:right-4 md:w-auto md:text-right">
-          <p className="text-sm text-gray-300">현재 시간</p>
-          <p className="text-lg font-medium">{currentTime}</p>
+        <div className="absolute top-2 right-4 md:top-4">
+          <p className="text-sm text-gray-300 md:text-lg">{currentTime}</p>
         </div>
       </div>
     </header>
