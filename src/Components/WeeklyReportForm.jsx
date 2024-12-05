@@ -15,8 +15,8 @@ export default function WeeklyReportForm() {
           </label>
           <input
             type="date"
-            className="w-full h-10 p-2 text-gray-800 bg-white border border-gray-300 rounded bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            style={{ lineHeight: "2.5rem", fontSize: "1rem" }}
+            className="w-full h-12 p-2 text-gray-800 bg-white border border-gray-300 rounded bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+            style={{ lineHeight: "normal", fontSize: "1rem" }}
           />
         </div>
         <div className="flex flex-col w-full md:w-1/2">
@@ -25,8 +25,8 @@ export default function WeeklyReportForm() {
           </label>
           <input
             type="date"
-            className="w-full h-10 p-2 text-gray-800 bg-white border border-gray-300 rounded bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            style={{ lineHeight: "2.5rem", fontSize: "1rem" }}
+            className="w-full h-12 p-2 text-gray-800 bg-white border border-gray-300 rounded bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+            style={{ lineHeight: "normal", fontSize: "1rem" }}
           />
         </div>
       </div>
