@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function WeeklyReportForm() {
   return (
@@ -9,34 +11,29 @@ export default function WeeklyReportForm() {
 
       {/* 날짜 선택 */}
       <div className="flex flex-nowrap gap-4 mb-4 flex-col-xs">
+        {/* 시작 날짜 */}
         <div className="flex flex-col flex-1 min-w-[100px]">
           <label className="mb-2 text-sm font-medium text-white">
             시작 날짜
           </label>
-          <input
-            type="date"
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
             className="w-full h-12 p-2 text-gray-800 bg-white border border-gray-300 rounded bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            style={{
-              lineHeight: "normal",
-              fontSize: "1rem",
-              WebkitAppearance: "menulist", // iOS 달력 아이콘 표시
-              MozAppearance: "textfield", // Firefox 호환
-            }}
+            placeholderText="시작 날짜를 선택하세요"
           />
         </div>
+
+        {/* 종료 날짜 */}
         <div className="flex flex-col flex-1 min-w-[100px]">
           <label className="mb-2 text-sm font-medium text-white">
             종료 날짜
           </label>
-          <input
-            type="date"
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
             className="w-full h-12 p-2 text-gray-800 bg-white border border-gray-300 rounded bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            style={{
-              lineHeight: "normal",
-              fontSize: "1rem",
-              WebkitAppearance: "menulist", // iOS 달력 아이콘 표시
-              MozAppearance: "textfield", // Firefox 호환
-            }}
+            placeholderText="종료 날짜를 선택하세요"
           />
         </div>
       </div>
