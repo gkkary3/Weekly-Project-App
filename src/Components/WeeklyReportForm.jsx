@@ -3,6 +3,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function WeeklyReportForm() {
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   return (
     <div className="flex-grow p-6 bg-white rounded-lg shadow-xl bg-opacity-20">
       <h2 className="mb-4 text-xl font-bold text-gray-900">
