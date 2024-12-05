@@ -8,8 +8,8 @@ export default function WeeklyReportForm() {
       </h2>
 
       {/* 날짜 선택 */}
-      <div className="flex flex-col gap-4 mb-4 md:flex-row">
-        <div className="flex flex-col w-full md:w-1/2">
+      <div className="flex flex-nowrap gap-4 mb-4 flex-col-xs">
+        <div className="flex flex-col flex-1 min-w-[100px]">
           <label className="mb-2 text-sm font-medium text-white">
             시작 날짜
           </label>
@@ -24,7 +24,7 @@ export default function WeeklyReportForm() {
             }}
           />
         </div>
-        <div className="flex flex-col w-full md:w-1/2">
+        <div className="flex flex-col flex-1 min-w-[100px]">
           <label className="mb-2 text-sm font-medium text-white">
             종료 날짜
           </label>

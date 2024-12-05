@@ -49,3 +49,9 @@ input[type="date"] {
   line-height: normal;
   padding: 8px; /* 내부 여백 */
 }
+
+@media (max-width: 350px) {
+  .flex-col-xs {
+    flex-direction: column;
+  }
+}
