@@ -18,9 +18,7 @@ function WeeklyReportList() {
 
   return (
     <div className="flex-grow p-6 bg-white rounded-lg shadow-xl bg-opacity-20">
-      <h2 className="mb-4 text-xl font-bold text-gray-900">
-        작성된 보고 리스트
-      </h2>
+      <h2 className="mb-4 text-xl font-bold text-white">작성된 보고 리스트</h2>
 
       {/* 리스트 */}
       <ul className="space-y-4">

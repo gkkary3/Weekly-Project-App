@@ -63,3 +63,8 @@ input[type="date"] {
     flex-direction: column;
   }
 }
+
+.react-datepicker {
+  max-width: 100%; /* 화면을 넘어가지 않도록 제한 */
+  overflow-x: hidden; /* 수평 스크롤 제거 */
+}
