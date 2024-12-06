@@ -35,17 +35,26 @@ app.use(express.json());
 // });
 
 // PUT 요청 처리
-app.put("/Weekly-Project-App/user-report", (req, res) => {
+app.put("/Weekly-Project-App/user-report", async (req, res) => {
   const { formData, teamId, email } = req.body;
 
   if (!teamId || !email) {
     return res.status(400).json({ error: "Team ID and email are required." });
   }
 
-  // 파일 읽기
+  // 파일 존재 여부 확인
   let reports = {};
-  if (fs.existsSync(filePath)) {
-    reports = JSON.parse(fs.readFileSync(filePath, "utf8"));
+  try {
+    await fs.access(filePath); // 파일이 존재하는지 확인 (비동기)
+    const reportContent = await fs.readFile(filePath, "utf-8");
+    reports = JSON.parse(reportContent);
+  } catch (error) {
+    // 파일이 없으면 빈 객체로 초기화
+    if (error.code === "ENOENT") {
+      reports = {};
+    } else {
+      return res.status(500).json({ error: "Error reading file." });
+    }
   }
 
   // 팀과 이메일 구조 확인
@@ -64,11 +73,14 @@ app.put("/Weekly-Project-App/user-report", (req, res) => {
   reports[teamId][email].push(newReport);
 
   // 파일 저장
-  fs.writeFileSync(filePath, JSON.stringify(reports, null, 2));
-
-  res
-    .status(200)
-    .json({ message: "Report added successfully!", reportId: reportGuid });
+  try {
+    await fs.writeFile(filePath, JSON.stringify(reports, null, 2));
+    res
+      .status(200)
+      .json({ message: "Report added successfully!", reportId: reportGuid });
+  } catch (error) {
+    res.status(500).json({ error: "Error saving file." });
+  }
 });
 
 app.listen(PORT, () => {
