@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { updateWeeklyReport } from "../http.js";
 
 export default function WeeklyReportForm() {
   // 상태 초기화
@@ -24,6 +25,16 @@ export default function WeeklyReportForm() {
       ...prev,
       [key]: value,
     }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await updateWeeklyReport(formData);
+      alert("보고서가 성공적으로 저장되었습니다!");
+    } catch (error) {
+      console.error("Error updating report:", error);
+      alert("보고서를 저장하는 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -92,6 +103,7 @@ export default function WeeklyReportForm() {
       {/* 제출 버튼 */}
       <button
         type="submit"
+        onClick={() => handleSubmit()}
         className="w-full p-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
       >
         제출
