@@ -11,6 +11,7 @@ function App() {
   const [submitTeamData, setSubmitTeamData] = useState(null);
   const [teamIsSubmit, setTeamIsSubmit] = useState(false);
   const [heightApply, setHeightApply] = useState(0);
+  const [fetchResult, setFetchResult] = useState(false);
 
   useEffect(() => {
     const data = window.localStorage.getItem("submitTeam");
@@ -29,20 +30,35 @@ function App() {
     setHeightApply(headerHeight);
   };
 
+  const handlefetchResult = () => {
+    setFetchResult((prev) => !prev);
+  };
+
+  const handleLeaveTeam = () => {
+    setTeamIsSubmit(false);
+  };
+
   return teamSubmitData && teamIsSubmit && submitTeamData.team.name ? (
     <>
-      <Header submitTeamData={submitTeamData} handleHeight={handleHeight} />
+      <Header
+        submitTeamData={submitTeamData}
+        handleHeight={handleHeight}
+        handleLeaveTeam={handleLeaveTeam}
+      />
       <div
         className="flex flex-col w-full gap-4 p-4 bg-gray-800 md:h-screen md:flex-row sm:pt-24"
         style={{ paddingTop: `${heightApply}px` }} // Header 높이에 맞춰 여백 추가
       >
         {/* 작성 컴포넌트 */}
         <div className="flex-grow md:flex-1">
-          <WeeklyReportForm />
+          <WeeklyReportForm handlefetchResult={handlefetchResult} />
         </div>
         {/* 리스트 컴포넌트 */}
         <div className="flex-grow md:flex-1">
-          <WeeklyReportList />
+          <WeeklyReportList
+            handlefetchResult={handlefetchResult}
+            fetchResult={fetchResult}
+          />
         </div>
       </div>
     </>

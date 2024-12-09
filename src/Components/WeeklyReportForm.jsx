@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { updateWeeklyReport } from "../http.js";
+import { addWeeklyReport } from "../http.js";
 
-export default function WeeklyReportForm() {
+export default function WeeklyReportForm({ handlefetchResult }) {
   // 상태 초기화
   const [formData, setFormData] = useState({
     startDate: null,
@@ -29,8 +29,9 @@ export default function WeeklyReportForm() {
 
   const handleSubmit = async () => {
     try {
-      await updateWeeklyReport(formData);
+      await addWeeklyReport(formData);
       alert("보고서가 성공적으로 저장되었습니다!");
+      handlefetchResult();
     } catch (error) {
       console.error("Error updating report:", error);
       alert("보고서를 저장하는 중 오류가 발생했습니다.");

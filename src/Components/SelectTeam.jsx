@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import teamsData from "../resource/data.js";
 import Modal from "./Modal.jsx";
 import { v4 as uuidv4 } from "uuid";
@@ -35,6 +35,24 @@ export default function SelectTeam({ handleTeamSubmit }) {
   const assignTeam = useRef();
   const assignUserName = useRef();
   const assignUserEmail = useRef();
+
+  const submitTeamData = useMemo(() => {
+    const storedData = window.localStorage.getItem("submitTeam");
+    return storedData ? JSON.parse(storedData) : null;
+  }, []); // 빈 배열을 사용해 한 번만 계산
+
+  useEffect(() => {
+    if (submitTeamData) {
+      setSelectedTeam(submitTeamData.team.id);
+
+      var userInfo = submitTeamData.userInfo;
+      setSelectedUser((prevSelectedUser) => ({
+        ...prevSelectedUser,
+        name: userInfo ? userInfo.name : "",
+        email: userInfo ? userInfo.email : "",
+      }));
+    }
+  }, [submitTeamData]);
 
   useEffect(() => {
     if (selectedTeam && teamData[selectedTeam]) {
