@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.modal {
+  border: none;
+  border-radius: 8px;
+  padding: 0;
+  background-color: #ffffff; /* 밝은 흰색 배경 */
+  color: #2d3748; /* 텍스트 색상은 어두운 톤으로 */
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* 그림자는 은은하게 */
+}
+
+.modal-content {
+  position: relative;
+  padding: 16px;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #718096; /* 닫기 버튼 기본 색상 */
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.modal-close-btn:hover {
+  color: #e53e3e; /* 닫기 버튼 hover 시 강조 */
+}
+
+.modal-close-btn:focus {
+  outline: none;
+  box-shadow: 0 0 4px #63b3ed; /* 포커스 시 테두리 */
+}
+
+/* 모든 브라우저에서 기본 달력 아이콘 숨기기 */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none; /* iOS 및 Chrome */
+}
+
+input[type="date"]::-moz-calendar-picker-indicator {
+  display: none; /* Firefox */
+}
+
+/* iOS에서 input[type="date"]의 기본 스타일 제거 */
+input[type="date"] {
+  font-size: 16px;
+  height: 48px; /* 높이 강제 */
+  line-height: 1.2; /* 기본 높이 비율 */
+  text-align: center; /* 텍스트 정렬 */
+  padding: 0; /* 내부 여백 제거 */
+  appearance: menulist; /* iOS에서 기본 달력 아이콘 활성화 */
+}
+
+@media (max-width: 350px) {
+  .flex-col-xs {
+    flex-direction: column;
+  }
+}
+
+.react-datepicker {
+  max-width: 100%; /* 화면을 넘어가지 않도록 제한 */
+  overflow-x: hidden; /* 수평 스크롤 제거 */
+}
