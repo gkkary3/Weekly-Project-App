@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
 
 const app = express();
-const PORT = 5000;
 // __dirname 대체
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -197,8 +196,4 @@ app.delete("/Weekly-Project-App/delete-report/:reportId", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
 });
