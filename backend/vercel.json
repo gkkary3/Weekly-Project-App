@@ -6,7 +6,7 @@
       "use": "@vercel/react"
     },
     {
-      "src": "app.js",
+      "src": "/backend/app.js",
       "use": "@vercel/node"
     }
   ],
