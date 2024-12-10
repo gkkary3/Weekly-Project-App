@@ -13,7 +13,14 @@ const __dirname = path.dirname(__filename);
 // 파일 경로 정의
 const filePath = path.join(__dirname, "data", "user-report.json");
 
-app.use(cors());
+// 특정 도메인에서만 요청을 허용
+const corsOptions = {
+  origin: "https://weekly-project-72byetvdu-gkkary3s-projects.vercel.app", // 요청을 허용할 도메인
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // GET 요청 처리
