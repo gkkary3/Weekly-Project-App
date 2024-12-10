@@ -248,8 +248,8 @@ app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
     const filteredReports = reportData[teamId]?.[email] || [];
     res.status(200).json(filteredReports);
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Errors" });
   }
 });
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+app.listen(3000, () => console.log("Server running on ports 3000"));
