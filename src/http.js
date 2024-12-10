@@ -1,9 +1,14 @@
-const submitTeam = JSON.parse(localStorage.getItem("submitTeam"));
+const submitTeam = JSON.parse(localStorage.getItem("submitTeam")) || {};
+
 const teamId = submitTeam.team?.id;
 const email = submitTeam.userInfo?.email;
 
 export async function getWeeklyReport() {
   try {
+    if (!teamId || !email) {
+      throw new Error("Missing teamId or email");
+    }
+
     const response = await fetch(
       `https://weekly-project-app.vercel.app/api/Weekly-Project-App/user-report?teamId=${teamId}&email=${email}`
     );
