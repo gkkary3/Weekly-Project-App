@@ -1,6 +1,6 @@
 const submitTeam = JSON.parse(localStorage.getItem("submitTeam"));
-const teamId = submitTeam.team.id;
-const email = submitTeam.userInfo.email;
+const teamId = submitTeam.team?.id;
+const email = submitTeam.userInfo?.email;
 
 export async function getWeeklyReport() {
   try {
