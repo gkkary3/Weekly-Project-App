@@ -15,7 +15,7 @@ const filePath = path.join(__dirname, "data", "user-report.json");
 
 // 특정 도메인에서만 요청을 허용
 const corsOptions = {
-  origin: "https://weekly-project-72byetvdu-gkkary3s-projects.vercel.app", // 요청을 허용할 도메인
+  origin: "https://weekly-project-app.vercel.app", // 요청을 허용할 도메인
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
