@@ -5,7 +5,7 @@ const email = submitTeam.userInfo.email;
 export async function getWeeklyReport() {
   try {
     const response = await fetch(
-      `/api/Weekly-Project-App/user-report?teamId=${teamId}&email=${email}`
+      `https://weekly-project-app.vercel.app/Weekly-Project-App/user-report?teamId=${teamId}&email=${email}`
     );
 
     if (!response.ok) {
@@ -23,13 +23,16 @@ export async function updateWeeklyReport(formData, reportId) {
     throw new Error("No valid team or user information found");
   }
 
-  const response = await fetch("/api/Weekly-Project-App/user-report", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ formData, teamId, email, reportId }),
-  });
+  const response = await fetch(
+    "https://weekly-project-app.vercel.app/Weekly-Project-App/user-report",
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ formData, teamId, email, reportId }),
+    }
+  );
 
   if (!response.ok) {
     const error = await response.json();
@@ -44,13 +47,16 @@ export async function addWeeklyReport(formData) {
     throw new Error("No valid team or user information found");
   }
 
-  const response = await fetch("/api/Weekly-Project-App/user-report", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ formData, teamId, email }),
-  });
+  const response = await fetch(
+    "https://weekly-project-app.vercel.app/Weekly-Project-App/user-report",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ formData, teamId, email }),
+    }
+  );
 
   if (!response.ok) {
     const error = await response.json();
@@ -63,7 +69,7 @@ export async function addWeeklyReport(formData) {
 export async function deleteWeeklyReport(reportId) {
   try {
     const response = await fetch(
-      `/api/Weekly-Project-App/delete-report/${reportId}`,
+      `https://weekly-project-app.vercel.app/Weekly-Project-App/delete-report/${reportId}`,
       {
         method: "DELETE",
       }
