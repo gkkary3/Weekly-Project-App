@@ -223,19 +223,33 @@
 // });
 
 import express from "express";
+import { v4 as uuidv4 } from "uuid";
+import cors from "cors";
+import fs from "fs/promises";
 import path from "path";
 
-// Express 앱 설정
 const app = express();
+app.use(cors());
+app.use(express.json());
 
-// 정적 파일 서빙 (React 빌드 파일)
-app.use(express.static(path.join(__dirname, "../frontend/build")));
+const filePath = path.join(__dirname, "data", "user-report.json");
 
-// 모든 다른 요청을 index.html로 리다이렉트 (SPA를 위한 라우팅)
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
+  try {
+    await fs.access(filePath);
+    const reportContent = await fs.readFile(filePath, "utf-8");
+    const reportData = JSON.parse(reportContent);
+    const { teamId, email } = req.query;
+
+    if (!teamId || !email) {
+      return res.status(400).json({ error: "teamId와 email을 제공해주세요." });
+    }
+
+    const filteredReports = reportData[teamId]?.[email] || [];
+    res.status(200).json(filteredReports);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
+app.listen(3000, () => console.log("Server running on port 3000"));
