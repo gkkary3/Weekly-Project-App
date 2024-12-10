@@ -209,3 +209,8 @@ app.delete(
     }
   }
 );
+
+// 정적 파일 서빙 (필요 시)
+app.use("/", express.static(path.join(__dirname, "../frontend/build")));
+
+app.listen(3000, () => console.log("Server is running on port 3000"));
