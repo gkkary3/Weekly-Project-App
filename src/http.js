@@ -10,7 +10,7 @@ export async function getWeeklyReport() {
     }
 
     const response = await fetch(
-      `https://weekly-project-app.vercel.app/api/Weekly-Project-App/user-report?teamId=${teamId}&email=${email}`
+      `https://weekly-project-app.vercel.app/Weekly-Project-App/user-report?teamId=${teamId}&email=${email}`
     );
 
     if (!response.ok) {
