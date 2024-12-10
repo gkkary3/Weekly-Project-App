@@ -11,16 +11,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // 파일 경로 정의
-const filePath = path.join(__dirname, "data", "user-report.json");
+// const filePath = path.join(__dirname, "data", "user-report.json");
+const filePath = path.resolve(__dirname, "data/user-report.json");
 
 // 특정 도메인에서만 요청을 허용
-const corsOptions = {
-  origin: "https://weekly-project-app.vercel.app", // 요청을 허용할 도메인
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// const corsOptions = {
+//   origin: "https://weekly-project-app.vercel.app", // 요청을 허용할 도메인
+//   methods: ["GET", "POST", "PUT", "DELETE"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 // GET 요청 처리
