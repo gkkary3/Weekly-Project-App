@@ -36,7 +36,7 @@ app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
     const reportData = JSON.parse(reportContent);
 
     const { teamId, email } = req.query;
-
+    console.log(teamId, email);
     if (!teamId || !email) {
       return res.status(400).json({ error: "teamId와 email을 제공해주세요." });
     }
@@ -58,7 +58,7 @@ app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
 // POST 요청 처리
 app.post("/api/Weekly-Project-App/user-report", async (req, res) => {
   const { formData, teamId, email } = req.body;
-
+  console.log(teamId, email);
   if (!teamId || !email) {
     return res.status(400).json({ error: "Team ID and email are required." });
   }
