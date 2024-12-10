@@ -26,7 +26,7 @@ app.use(cors());
 app.use(express.json());
 
 // GET 요청 처리
-app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
+app.get("/Weekly-Project-App/user-report", async (req, res) => {
   try {
     // 파일 존재 확인
     await fs.access(filePath);
@@ -56,7 +56,7 @@ app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
 });
 
 // POST 요청 처리
-app.post("/api/Weekly-Project-App/user-report", async (req, res) => {
+app.post("/Weekly-Project-App/user-report", async (req, res) => {
   const { formData, teamId, email } = req.body;
   console.log(teamId, email);
   if (!teamId || !email) {
