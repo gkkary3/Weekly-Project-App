@@ -11,8 +11,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // 파일 경로 정의
-// const filePath = path.join(__dirname, "data", "user-report.json");
-const filePath = path.resolve(__dirname, "data/user-report.json");
+const filePath = path.join(__dirname, "data", "user-report.json");
+// const filePath = path.resolve(__dirname, "data/user-report.json");
 
 // 특정 도메인에서만 요청을 허용
 // const corsOptions = {
