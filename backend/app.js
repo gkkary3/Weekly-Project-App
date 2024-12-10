@@ -26,7 +26,7 @@ app.use(cors());
 app.use(express.json());
 
 // GET 요청 처리
-app.get("/Weekly-Project-App/user-report", async (req, res) => {
+app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
   try {
     // 파일 존재 확인
     await fs.access(filePath);
@@ -56,7 +56,7 @@ app.get("/Weekly-Project-App/user-report", async (req, res) => {
 });
 
 // POST 요청 처리
-app.post("/Weekly-Project-App/user-report", async (req, res) => {
+app.post("/api/Weekly-Project-App/user-report", async (req, res) => {
   const { formData, teamId, email } = req.body;
   console.log(teamId, email);
   if (!teamId || !email) {
@@ -105,7 +105,7 @@ app.post("/Weekly-Project-App/user-report", async (req, res) => {
 });
 
 // PUT 요청 처리
-app.put("/Weekly-Project-App/user-report", async (req, res) => {
+app.put("/api/Weekly-Project-App/user-report", async (req, res) => {
   const { formData, teamId, email, reportId } = req.body;
 
   if (!teamId || !email) {
@@ -158,51 +158,54 @@ app.put("/Weekly-Project-App/user-report", async (req, res) => {
 });
 
 // DELETE 요청 처리
-app.delete("/Weekly-Project-App/delete-report/:reportId", async (req, res) => {
-  const { reportId } = req.params;
+app.delete(
+  "/api/Weekly-Project-App/delete-report/:reportId",
+  async (req, res) => {
+    const { reportId } = req.params;
 
-  try {
-    // 파일 존재 확인
-    await fs.access(filePath);
+    try {
+      // 파일 존재 확인
+      await fs.access(filePath);
 
-    // JSON 파일 읽기
-    const reportContent = await fs.readFile(filePath, "utf-8");
-    const reportData = JSON.parse(reportContent);
+      // JSON 파일 읽기
+      const reportContent = await fs.readFile(filePath, "utf-8");
+      const reportData = JSON.parse(reportContent);
 
-    let isDeleted = false;
+      let isDeleted = false;
 
-    // reportId를 기준으로 삭제
-    Object.keys(reportData).forEach((teamId) => {
-      Object.keys(reportData[teamId]).forEach((email) => {
-        const reports = reportData[teamId][email];
+      // reportId를 기준으로 삭제
+      Object.keys(reportData).forEach((teamId) => {
+        Object.keys(reportData[teamId]).forEach((email) => {
+          const reports = reportData[teamId][email];
 
-        // reportId를 가진 보고서를 필터링하여 삭제
-        const filteredReports = reports.filter(
-          (report) => report.id !== reportId
-        );
-        if (filteredReports.length < reports.length) {
-          // 보고서가 삭제되었으면 데이터를 갱신
-          reportData[teamId][email] = filteredReports;
-          isDeleted = true;
-        }
+          // reportId를 가진 보고서를 필터링하여 삭제
+          const filteredReports = reports.filter(
+            (report) => report.id !== reportId
+          );
+          if (filteredReports.length < reports.length) {
+            // 보고서가 삭제되었으면 데이터를 갱신
+            reportData[teamId][email] = filteredReports;
+            isDeleted = true;
+          }
+        });
       });
-    });
 
-    if (isDeleted) {
-      // 삭제 후 변경된 데이터를 파일에 저장
-      await fs.writeFile(filePath, JSON.stringify(reportData, null, 2));
+      if (isDeleted) {
+        // 삭제 후 변경된 데이터를 파일에 저장
+        await fs.writeFile(filePath, JSON.stringify(reportData, null, 2));
 
-      res.status(200).json({ message: "Report deleted successfully" });
-    } else {
-      res.status(404).json({ error: "Report not found" });
-    }
-  } catch (error) {
-    if (error.code === "ENOENT") {
-      console.error("Error: JSON file does not exist.");
-      res.status(404).json({ error: "Data file not found." });
-    } else {
-      console.error("Error deleting reports:", error.message);
-      res.status(500).json({ error: "Internal Server Error" });
+        res.status(200).json({ message: "Report deleted successfully" });
+      } else {
+        res.status(404).json({ error: "Report not found" });
+      }
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        console.error("Error: JSON file does not exist.");
+        res.status(404).json({ error: "Data file not found." });
+      } else {
+        console.error("Error deleting reports:", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
     }
   }
-});
+);
