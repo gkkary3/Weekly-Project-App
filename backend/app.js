@@ -214,8 +214,8 @@ app.delete(
 // app.use("/", express.static(path.join(__dirname, "../build")));
 
 // 모든 다른 요청을 index.html로 리다이렉트
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build/index.html"));
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../build/index.html"));
+// });
 
 app.listen(3000, () => console.log("Server is running on portss 3000"));
