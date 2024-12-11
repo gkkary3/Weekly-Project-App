@@ -211,7 +211,9 @@ app.delete(
 );
 
 // 정적 파일 서빙 (필요 시)
-app.use("/", express.static(path.join(__dirname, "../frontend/build")));
+// app.use("/", express.static(path.join(__dirname, "../frontend/build")));
+// 정적 파일 서빙
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // 모든 다른 요청을 index.html로 리다이렉트
 app.get("*", (req, res) => {
