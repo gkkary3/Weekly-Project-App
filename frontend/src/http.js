@@ -11,6 +11,7 @@ export async function getWeeklyReport() {
 
     const response = await fetch(
       `https://weekly-project-app.onrender.com/api/Weekly-Project-App/user-report?teamId=${teamId}&email=${email}`
+      // `http://localhost:3000/api/Weekly-Project-App/user-report?teamId=${teamId}&email=${email}`
     );
 
     if (!response.ok) {
@@ -30,6 +31,7 @@ export async function updateWeeklyReport(formData, reportId) {
 
   const response = await fetch(
     "https://weekly-project-app.onrender.com/api/Weekly-Project-App/user-report",
+    // "http://localhost:3000/api/Weekly-Project-App/user-report",
     {
       method: "PUT",
       headers: {
@@ -54,6 +56,7 @@ export async function addWeeklyReport(formData) {
 
   const response = await fetch(
     "https://weekly-project-app.onrender.com/api/Weekly-Project-App/user-report",
+    // "http://localhost:3000/api/Weekly-Project-App/user-report",
     {
       method: "POST",
       headers: {
@@ -75,6 +78,7 @@ export async function deleteWeeklyReport(reportId) {
   try {
     const response = await fetch(
       `https://weekly-project-app.onrender.com/api/Weekly-Project-App/delete-report/${reportId}`,
+      // `http://localhost:3000/api/Weekly-Project-App/delete-report/${reportId}`,
       {
         method: "DELETE",
       }

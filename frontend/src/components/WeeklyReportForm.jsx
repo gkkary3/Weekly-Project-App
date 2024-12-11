@@ -29,6 +29,16 @@ export default function WeeklyReportForm({ handlefetchResult }) {
 
   const handleSubmit = async () => {
     try {
+      if (!formData.endDate || !formData.startDate) {
+        alert("날짜를 확인해주세요.");
+        return;
+      }
+
+      if (!formData.content) {
+        alert("내용을 확인해주세요.");
+        return;
+      }
+
       await addWeeklyReport(formData);
       alert("보고서가 성공적으로 저장되었습니다!");
       handlefetchResult();
@@ -39,7 +49,7 @@ export default function WeeklyReportForm({ handlefetchResult }) {
   };
 
   return (
-    <div className="flex-grow p-6 bg-white rounded-lg shadow-xl bg-opacity-20">
+    <div className="flex-grow h-full p-6 overflow-y-auto bg-white rounded-lg shadow-xl scrollbar-custom min-h-30rem bg-opacity-20">
       <h2 className="mb-4 text-xl font-bold text-white">팀 주간 보고 작성</h2>
 
       {/* 날짜 선택 */}
@@ -81,10 +91,11 @@ export default function WeeklyReportForm({ handlefetchResult }) {
       <div className="flex flex-col mb-4">
         <label className="mb-2 text-sm font-medium text-white">내용</label>
         <textarea
-          rows="4"
+          rows="5"
+          style={{ resize: "none" }}
           value={formData.content}
           onChange={(e) => handleChange("content", e.target.value)}
-          className="p-2 text-gray-800 bg-white border border-gray-300 rounded bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="p-2 text-gray-800 bg-white border border-gray-300 rounded scrollbar-custom bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="내용을 입력하세요..."
         ></textarea>
       </div>
@@ -93,10 +104,11 @@ export default function WeeklyReportForm({ handlefetchResult }) {
       <div className="flex flex-col mb-4">
         <label className="mb-2 text-sm font-medium text-white">비고</label>
         <textarea
-          rows="2"
+          rows="3"
+          style={{ resize: "none" }}
           value={formData.note}
           onChange={(e) => handleChange("note", e.target.value)}
-          className="p-2 text-gray-800 bg-white border border-gray-300 rounded bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="p-2 text-gray-800 bg-white border border-gray-300 rounded scrollbar-custom bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="비고를 입력하세요..."
         ></textarea>
       </div>
