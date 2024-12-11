@@ -24,6 +24,7 @@ function App() {
   const handleTeamSubmit = (submitTeam) => {
     setSubmitTeamData(submitTeam);
     setTeamIsSubmit(true);
+    setTeamSubmitData(true);
   };
 
   const handleHeight = (headerHeight) => {
