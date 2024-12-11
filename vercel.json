@@ -17,7 +17,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/build/$1"
+      "destination": "/build/index.html"
     }
   ]
 }
