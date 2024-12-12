@@ -42,7 +42,7 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
   };
 
   const handleEdit = (report) => {
-    setEditingReport(report.id); // Set editing report
+    setEditingReport(report._id); // Set editing report
     setEditedData({
       startDate: report.startDate,
       endDate: report.endDate,
@@ -92,7 +92,7 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
               className="p-2 mb-3 bg-white rounded-lg shadow-md sm:p-4 bg-opacity-90"
             >
               {/* editing 조건부 렌더링 */}
-              {editingReport === report.id ? (
+              {editingReport === report._id ? (
                 <div className="flex items-center justify-between">
                   <div className="relative w-full">
                     {/* 취소 button (X) */}
@@ -191,8 +191,12 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
                   <div className="flex items-center justify-between">
                     {/* 날짜 부분 */}
                     <h3 className="text-sm font-semibold text-gray-800 sm:text-base">
-                      {format(new Date(report.startDate), "yyyy-MM-dd")} ~{" "}
-                      {format(new Date(report.endDate), "yyyy-MM-dd")}
+                      {format(
+                        new Date(report.formData.startDate),
+                        "yyyy-MM-dd"
+                      )}{" "}
+                      ~{" "}
+                      {format(new Date(report.formData.endDate), "yyyy-MM-dd")}
                     </h3>
 
                     {/* 버튼들 */}
@@ -206,7 +210,7 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
                       </button>
                       <button
                         className="p-2 text-red-500 rounded hover:bg-red-200 sm:p-1 "
-                        onClick={() => handleDelete(report.id)}
+                        onClick={() => handleDelete(report._id)}
                         aria-label="삭제"
                       >
                         <TrashIcon className="w-4 h-4 sm:w-5 sm:h-5" />
