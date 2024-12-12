@@ -54,7 +54,7 @@ export default function Header({
     >
       <div className="relative flex items-start justify-between p-4 mx-auto">
         {/* 팀 정보 */}
-        <div className="mt-2 mb-4 text-left">
+        <div className="mt-4 mb-4 text-left">
           <h1 className="text-xl font-bold text-blue-400">
             {submitTeamData.team.name}
           </h1>

@@ -76,20 +76,24 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
   };
 
   return (
-    <div className="flex-grow p-6 bg-white rounded-lg shadow-xl bg-opacity-20">
+    <div
+      className={`flex-grow p-6 bg-white rounded-lg shadow-xl bg-opacity-20 ${
+        reports.length > 0 ? "h-full" : ""
+      }`}
+    >
       <h2 className="mb-4 text-xl font-bold text-white">작성된 보고 리스트</h2>
 
       {/* 조건부 렌더링 */}
       {reports.length > 0 ? (
-        <ul className="space-y-4">
+        <ul className="p-2 overflow-y-auto rounded-lg shadow-md sm:p-4 max-h-30rem bg-gray-50 scrollbar-custom">
           {reports.map((report, index) => (
             <li
               key={index}
-              className="p-4 bg-white rounded-lg shadow-md bg-opacity-90"
+              className="p-2 mb-3 bg-white rounded-lg shadow-md sm:p-4 bg-opacity-90"
             >
               {/* editing 조건부 렌더링 */}
               {editingReport === report.id ? (
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <div className="relative w-full">
                     {/* 취소 button (X) */}
                     <button
@@ -143,6 +147,7 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
                       </label>
                       <textarea
                         rows="4"
+                        style={{ resize: "none" }}
                         name="content"
                         defaultValue={editedData.content}
                         onChange={(e) =>
@@ -160,6 +165,7 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
                       </label>
                       <textarea
                         rows="2"
+                        style={{ resize: "none" }}
                         name="note"
                         defaultValue={editedData.note}
                         onChange={(e) => handleChange("note", e.target.value)}
@@ -182,7 +188,7 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
               ) : (
                 // edting 아닐 떄 렌더링
                 <>
-                  <div className="flex justify-between items-center">
+                  <div className="flex items-center justify-between">
                     {/* 날짜 부분 */}
                     <h3 className="text-sm font-semibold text-gray-800 sm:text-base">
                       {format(new Date(report.startDate), "yyyy-MM-dd")} ~{" "}
@@ -190,7 +196,7 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
                     </h3>
 
                     {/* 버튼들 */}
-                    <div className="ml-4 flex">
+                    <div className="flex ml-4">
                       <button
                         className="p-2 text-blue-500 rounded hover:bg-blue-200 sm:p-1 "
                         onClick={() => handleEdit(report)}
@@ -209,10 +215,16 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
                   </div>
 
                   {/* 내용 및 비고 */}
-                  <p className="mt-2 text-sm text-gray-700 sm:text-base">
+                  <p
+                    className="mt-2 text-sm text-gray-700 break-words sm:text-base"
+                    style={{ maxWidth: "100%", wordBreak: "break-word" }}
+                  >
                     <strong>내용:</strong> {report.content}
                   </p>
-                  <p className="mt-1 text-sm text-gray-600 sm:text-base">
+                  <p
+                    className="mt-2 text-sm text-gray-700 break-words sm:text-base"
+                    style={{ maxWidth: "100%", wordBreak: "break-word" }}
+                  >
                     <strong>비고:</strong> {report.note}
                   </p>
                 </>

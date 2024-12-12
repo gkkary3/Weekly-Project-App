@@ -5,8 +5,8 @@ const teams = {
   [`team-${uuidv4()}`]: {
     name: "클라우드 애플리케이션 팀",
     users: {
-      kim12: { email: "psangmin@gmail.com", name: "박상민" },
-      lee12: { email: "lee12@gmail.com", name: "이수정" },
+      psangmin: { email: "psangmin@gmail.com", name: "박상민" },
+      // lee12: { email: "lee12@gmail.com", name: "이수정" },
     },
   },
   // [`team-${uuidv4()}`]: {
