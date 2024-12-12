@@ -3,7 +3,7 @@ import teamsData from "../resource/data.js";
 import Modal from "./Modal.jsx";
 import { v4 as uuidv4 } from "uuid";
 
-export default function SelectTeam({ handleTeamSubmit }) {
+export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedUser, setSelectedUser] = useState({
     name: "",
@@ -71,6 +71,7 @@ export default function SelectTeam({ handleTeamSubmit }) {
       window.localStorage.setItem("submitTeam", JSON.stringify(submitTeam));
 
       handleTeamSubmit(submitTeam);
+      handlefetchResult();
     }
   }, [submitTeam, handleTeamSubmit]);
 

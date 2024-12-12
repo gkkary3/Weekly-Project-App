@@ -64,7 +64,10 @@ function App() {
       </div>
     </>
   ) : (
-    <SelectTeam handleTeamSubmit={handleTeamSubmit} />
+    <SelectTeam
+      handleTeamSubmit={handleTeamSubmit}
+      handlefetchResult={handlefetchResult}
+    />
   );
 }
 
