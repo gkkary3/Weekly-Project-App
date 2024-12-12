@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 // GET 요청 처리
-app.get("/api/Weekly-Project-App/getUserReport", async (req, res) => {
+app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
   const { teamId, email } = req.query;
 
   if (!teamId || !email) {
@@ -38,7 +38,7 @@ app.get("/api/Weekly-Project-App/getUserReport", async (req, res) => {
 });
 
 // POST 요청 처리
-app.post("/api/Weekly-Project-App/addUserReport", async (req, res) => {
+app.post("/api/Weekly-Project-App/user-report", async (req, res) => {
   const { formData, teamId, email } = req.body;
 
   if (!teamId || !email) {
@@ -63,7 +63,7 @@ app.post("/api/Weekly-Project-App/addUserReport", async (req, res) => {
 });
 
 // PUT 요청 처리
-app.put("/api/Weekly-Project-App/updateUserReport", async (req, res) => {
+app.put("/api/Weekly-Project-App/user-report", async (req, res) => {
   const { formData, teamId, email, reportId } = req.body;
 
   if (!teamId || !email) {
@@ -88,7 +88,7 @@ app.put("/api/Weekly-Project-App/updateUserReport", async (req, res) => {
 });
 
 // DELETE 요청 처리
-app.delete("/api/Weekly-Project-App/deleteUserReport/:id", async (req, res) => {
+app.delete("/api/Weekly-Project-App/user-report/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
