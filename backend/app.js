@@ -92,7 +92,9 @@ app.delete("/api/Weekly-Project-App/user-report/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deletedReport = await Report.findByIdAndDelete(id);
+    const deletedReport = await Report.findByIdAndDelete(
+      mongoose.Types.ObjectId(id)
+    );
     if (!deletedReport) {
       return res.status(404).json({ error: "Report not found." });
     }
