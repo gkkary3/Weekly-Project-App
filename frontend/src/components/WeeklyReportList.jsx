@@ -47,7 +47,7 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
       startDate: report.formData.startDate,
       endDate: report.formData.endDate,
       content: report.formData.content,
-      note: report.note,
+      note: report.formData.note,
     });
   };
 
