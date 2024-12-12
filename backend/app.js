@@ -4,8 +4,8 @@ import { fileURLToPath } from "url";
 import express from "express";
 // import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
-import connectDB from "./config/db";
-import Report from "./models/Report";
+import connectDB from "./config/db.js";
+import Report from "./models/Report.js";
 
 const app = express();
 connectDB();
