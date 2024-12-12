@@ -11,4 +11,4 @@ const ReportSchema = new mongoose.Schema({
 // 모델 생성
 const Report = mongoose.model("Report", ReportSchema);
 
-module.exports = Report;
+export default Report;
