@@ -5,6 +5,7 @@ import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import Report from "./models/Report.js";
+import Team from "./models/Team.js";
 
 const app = express();
 connectDB();
@@ -20,6 +21,7 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+/* Report */
 // GET 요청 처리
 app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
   const { teamId, email } = req.query;
@@ -99,6 +101,35 @@ app.delete("/api/Weekly-Project-App/user-report/:id", async (req, res) => {
     res.status(200).json({ message: "Report deleted successfully!" });
   } catch (error) {
     res.status(500).json({ error: "Error deleting report." });
+  }
+});
+
+/* Team */
+
+// POST 요청 처리
+app.post("/api/Weekly-Project-App/addTeam", async (req, res) => {
+  const { name, teamId } = req.body;
+
+  // 요청 데이터 검증
+  // if (!name || !teamId) {
+  //   return res.status(400).json({ error: "Team name and ID are required." });
+  // }
+
+  try {
+    // MongoDB에 저장할 Team 모델 생성 (Team 스키마가 필요함)
+    const team = new Team({ name, teamId });
+
+    // 데이터 저장
+    const savedTeam = await team.save();
+
+    // 성공 응답
+    res.status(201).json({
+      message: "Team added successfully!",
+      team: savedTeam,
+    });
+  } catch (error) {
+    console.error("Error adding team:", error);
+    res.status(500).json({ error: "Failed to add team." });
   }
 });
 

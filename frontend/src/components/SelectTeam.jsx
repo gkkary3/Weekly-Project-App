@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 import teamsData from "../resource/data.js";
 import Modal from "./Modal.jsx";
 import { v4 as uuidv4 } from "uuid";
-
+import { addTeamList } from "../http.js";
 export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedUser, setSelectedUser] = useState({
@@ -73,7 +73,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       handleTeamSubmit(submitTeam);
       handlefetchResult();
     }
-  }, [submitTeam, handleTeamSubmit]);
+  }, [submitTeam, handleTeamSubmit, handlefetchResult]);
 
   const handleNameChange = (event) => {
     var userEmail = event.target.value;
@@ -138,20 +138,22 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     setModalType({ type: "", action: "" });
   };
 
-  const handleAddTeam = () => {
-    var teamName = assignTeam.current.value;
+  const handleAddTeam = async () => {
+    try {
+      var teamName = assignTeam.current.value;
 
-    if (teamName.trim().length === 0) {
-      alert("팀 이름을 확인해 주세요.");
-      return;
+      if (teamName.trim().length === 0) {
+        alert("팀 이름을 확인해 주세요.");
+        return;
+      }
+      const newTeamKey = `team-${uuidv4()}`;
+
+      await addTeamList(teamName, newTeamKey);
+      handleCloseModal();
+    } catch (error) {
+      console.error("Error add Team:", error);
+      alert("팀을 저장하는 중 오류가 발생했습니다.");
     }
-    const newTeamKey = `team-${uuidv4()}`;
-    // setTeamData((teamData[newTeamKey] = { name: teamName, users: {} }));
-    setTeamData((prevData) => ({
-      ...prevData, // 기존 데이터를 유지
-      [newTeamKey]: { name: teamName, users: {} }, // 새로운 팀 추가
-    }));
-    handleCloseModal();
   };
 
   const handleUpdateData = (identifier, type) => {

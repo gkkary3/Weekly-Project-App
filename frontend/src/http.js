@@ -90,3 +90,28 @@ export async function deleteWeeklyReport(reportId) {
     throw error;
   }
 }
+
+export async function getTeamList() {}
+
+export async function addTeamList(name, teamId) {
+  const response = await fetch(
+    // "https://weekly-project-app.onrender.com/api/Weekly-Project-App/addTeam",
+    "http://localhost:3000/api/Weekly-Project-App/addTeam",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, teamId }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to add team");
+  }
+
+  return response.json();
+}
+
+export async function updateTeamList() {}
