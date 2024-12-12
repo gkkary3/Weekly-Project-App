@@ -44,9 +44,9 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
   const handleEdit = (report) => {
     setEditingReport(report._id); // Set editing report
     setEditedData({
-      startDate: report.startDate,
-      endDate: report.endDate,
-      content: report.content,
+      startDate: report.formData.startDate,
+      endDate: report.formData.endDate,
+      content: report.formData.content,
       note: report.note,
     });
   };
@@ -223,13 +223,13 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
                     className="mt-2 text-sm text-gray-700 break-words sm:text-base"
                     style={{ maxWidth: "100%", wordBreak: "break-word" }}
                   >
-                    <strong>내용:</strong> {report.content}
+                    <strong>내용:</strong> {report.formData.content}
                   </p>
                   <p
                     className="mt-2 text-sm text-gray-700 break-words sm:text-base"
                     style={{ maxWidth: "100%", wordBreak: "break-word" }}
                   >
-                    <strong>비고:</strong> {report.note}
+                    <strong>비고:</strong> {report.formData.note}
                   </p>
                 </>
               )}
