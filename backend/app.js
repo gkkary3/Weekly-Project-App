@@ -20,6 +20,7 @@ connectDB();
 // app.use(cors(corsOptions));
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 /* Report */
 // GET 요청 처리
@@ -105,15 +106,20 @@ app.delete("/api/Weekly-Project-App/user-report/:id", async (req, res) => {
 });
 
 /* Team */
+// GET 요청 처리
+app.get("/api/Weekly-Project-App/getTeamList", async (req, res) => {
+  try {
+    // 팀 ID와 이메일로 데이터 검색
+    const teamList = await Team.find();
+    res.status(200).json(teamList);
+  } catch (error) {
+    res.status(500).json({ error: "Error retrieving reports." });
+  }
+});
 
 // POST 요청 처리
 app.post("/api/Weekly-Project-App/addTeam", async (req, res) => {
   const { name, teamId } = req.body;
-
-  // 요청 데이터 검증
-  // if (!name || !teamId) {
-  //   return res.status(400).json({ error: "Team name and ID are required." });
-  // }
 
   try {
     // MongoDB에 저장할 Team 모델 생성 (Team 스키마가 필요함)
@@ -130,6 +136,46 @@ app.post("/api/Weekly-Project-App/addTeam", async (req, res) => {
   } catch (error) {
     console.error("Error adding team:", error);
     res.status(500).json({ error: "Failed to add team." });
+  }
+});
+
+// PUT 요청 처리
+app.put("/api/Weekly-Project-App/updateTeam", async (req, res) => {
+  const { teamId, name } = req.body;
+
+  if (!teamId || !name) {
+    return res.status(400).json({ error: "Team ID and name are required." });
+  }
+
+  try {
+    const updatedTeam = await Team.findOneAndUpdate(
+      { teamId },
+      { name },
+      { new: true } // 업데이트된 문서를 반환
+    );
+    if (!updatedTeam) {
+      return res.status(404).json({ error: "Report not found." });
+    }
+    res
+      .status(200)
+      .json({ message: "Team updated successfully!", updatedTeam });
+  } catch (error) {
+    res.status(500).json({ error: "Error updating team." });
+  }
+});
+
+// DELETE 요청 처리
+app.delete("/api/Weekly-Project-App/deleteTeam/:id", async (req, res) => {
+  const { teamId } = req.params;
+
+  try {
+    const deletedTeam = await Team.findOneAndDelete(teamId);
+    if (!deletedTeam) {
+      return res.status(404).json({ error: "Taem not found." });
+    }
+    res.status(200).json({ message: "Taem deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting Taem." });
   }
 });
 

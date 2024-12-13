@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import teamsData from "../resource/data.js";
 import Modal from "./Modal.jsx";
 import { v4 as uuidv4 } from "uuid";
-import { addTeamList } from "../http.js";
+import { addTeam, deleteTeam, getTeamList, updateTeam } from "../http.js";
 export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
-  const [selectedTeam, setSelectedTeam] = useState("");
+  const [selectedTeam, setSelectedTeam] = useState({
+    teamId: "",
+    name: "",
+  });
   const [selectedUser, setSelectedUser] = useState({
     name: "",
     email: "",
@@ -20,10 +22,8 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     },
   });
   const [userOptions, setUserOptions] = useState([]);
-  const [teamData, setTeamData] = useState(() => {
-    const teamData = window.localStorage.getItem("teamData");
-    return teamData ? JSON.parse(teamData) : { ...teamsData };
-  });
+  const [teamData, setTeamData] = useState([]);
+  const [fetchResult, setFetchResult] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalType, setModalType] = useState({ type: "", action: "" }); // type: team/user  , action: add, update, delete
   const [emailIsInvalid, setEmailIsInvalid] = useState();
@@ -40,6 +40,19 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     const storedData = window.localStorage.getItem("submitTeam");
     return storedData ? JSON.parse(storedData) : null;
   }, []); // 빈 배열을 사용해 한 번만 계산
+
+  useEffect(() => {
+    const fetchTeamList = async () => {
+      try {
+        const teamList = await getTeamList();
+        setTeamData(teamList);
+      } catch (error) {
+        console.error("Failed to fetch team list:", error);
+      }
+    };
+
+    fetchTeamList();
+  }, [fetchResult]);
 
   useEffect(() => {
     if (submitTeamData) {
@@ -104,17 +117,18 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
   };
 
   const handleTeamChange = (event) => {
-    const team = event.target.value;
-    setSelectedTeam(team);
+    const teamId = event.target.value;
+    const name = event.target.options[event.target.selectedIndex].text;
+    setSelectedTeam({ teamId, name });
     setSelectedUser({
       name: "",
       email: "",
     });
-    if (team && teamData[team]) {
-      setUserOptions(Object.values(teamData[team].users));
-    } else {
-      setUserOptions([]);
-    }
+    // if (teamId && teamData[teamId]) {
+    //   setUserOptions(Object.values(teamData[team].users));
+    // } else {
+    //   setUserOptions([]);
+    // }
   };
 
   const handleOpenModal = (type, action) => {
@@ -148,7 +162,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       }
       const newTeamKey = `team-${uuidv4()}`;
 
-      await addTeamList(teamName, newTeamKey);
+      await addTeam(teamName, newTeamKey);
       handleCloseModal();
     } catch (error) {
       console.error("Error add Team:", error);
@@ -156,16 +170,16 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     }
   };
 
-  const handleUpdateData = (identifier, type) => {
+  const handleUpdateData = async (identifier, type) => {
     if (type === "team") {
-      const teamName = assignTeam.current.value;
-      setTeamData((prevData) => ({
-        ...prevData,
-        [identifier]: {
-          ...prevData[identifier],
-          name: teamName, // 팀 이름 업데이트
-        },
-      }));
+      try {
+        const teamName = assignTeam.current.value;
+        await updateTeam(identifier, teamName);
+        setFetchResult((prev) => !prev);
+      } catch (error) {
+        console.error("Error update Team:", error);
+        alert("팀을 수정하는 중 오류가 발생했습니다.");
+      }
     } else if (type === "user") {
       const userName = assignUserName.current.value;
       const userEmail = assignUserEmail.current.value;
@@ -206,16 +220,13 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     handleCloseModal();
   };
 
-  const handleDeleteData = (type) => {
+  const handleDeleteData = async (type) => {
     if (selectedTeam && type === "team") {
-      if (Object.keys(teamData[selectedTeam].users).length > 0) {
-        alert("사용자가 존재합니다.");
-      } else {
-        setTeamData((prevData) => {
-          const updateDate = { ...prevData };
-          delete updateDate[selectedTeam];
-          return updateDate;
-        });
+      try {
+        await deleteTeam(selectedTeam.teamId);
+      } catch (error) {
+        console.error("Error delete Team:", error);
+        alert("팀을 삭제하는 중 오류가 발생했습니다.");
       }
     } else if (selectedTeam && selectedUser.email && type === "user") {
       setTeamData((prevData) => {
@@ -302,14 +313,14 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
               className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               ref={assignTeam}
               {...(action === "update" && {
-                defaultValue: teamData[selectedTeam].name,
+                defaultValue: selectedTeam.name,
               })}
             />
             <button
               onClick={
                 action === "add"
                   ? () => handleAddTeam()
-                  : () => handleUpdateData(selectedTeam, type)
+                  : () => handleUpdateData(selectedTeam.teamId, type)
               }
               className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
@@ -433,14 +444,14 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
             <select
               id="team"
               name="team"
-              value={selectedTeam}
+              value={selectedTeam.teamId}
               onChange={handleTeamChange}
               className="w-full p-2 mt-2 text-white bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="">팀을 선택하세요</option>
-              {Object.keys(teamData).map((teamKey) => (
-                <option key={teamKey} value={teamKey}>
-                  {teamData[teamKey].name}
+              {teamData.map((team) => (
+                <option key={team.teamId} value={team.teamId}>
+                  {team.name}
                 </option>
               ))}
             </select>

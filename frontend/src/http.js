@@ -91,12 +91,27 @@ export async function deleteWeeklyReport(reportId) {
   }
 }
 
-export async function getTeamList() {}
+export async function getTeamList() {
+  try {
+    const response = await fetch(
+      `https://weekly-project-app.onrender.com/api/Weekly-Project-App/getTeamList`
+      // "http://localhost:3000/api/Weekly-Project-App/getTeamList"
+    );
 
-export async function addTeamList(name, teamId) {
+    if (!response.ok) {
+      throw new Error("Failed to fetch getTeamList");
+    }
+    return await response.json(); // 필터링된 데이터 반환
+  } catch (error) {
+    console.error("Error fetching getTeamList:", error);
+    return [];
+  }
+}
+
+export async function addTeam(name, teamId) {
   const response = await fetch(
-    // "https://weekly-project-app.onrender.com/api/Weekly-Project-App/addTeam",
-    "http://localhost:3000/api/Weekly-Project-App/addTeam",
+    "https://weekly-project-app.onrender.com/api/Weekly-Project-App/addTeam",
+    // "http://localhost:3000/api/Weekly-Project-App/addTeam",
     {
       method: "POST",
       headers: {
@@ -114,4 +129,44 @@ export async function addTeamList(name, teamId) {
   return response.json();
 }
 
-export async function updateTeamList() {}
+export async function updateTeam(teamId, name) {
+  const response = await fetch(
+    "https://weekly-project-app.onrender.com/api/Weekly-Project-App/updateTeam",
+    // "http://localhost:3000/api/Weekly-Project-App/updateTeam",
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ teamId, name }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to update report");
+  }
+
+  return response.json();
+}
+
+export async function deleteTeam(teamId) {
+  try {
+    const response = await fetch(
+      `https://weekly-project-app.onrender.com/api/Weekly-Project-App/deleteTeam/${teamId}`,
+      // `http://localhost:3000/api/Weekly-Project-App/deleteTeam/${teamId}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete the team");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error deleting team:", error);
+    throw error;
+  }
+}
