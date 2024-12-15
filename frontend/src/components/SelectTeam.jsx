@@ -1,7 +1,14 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import Modal from "./Modal.jsx";
 import { v4 as uuidv4 } from "uuid";
-import { addTeam, deleteTeam, getTeamList, updateTeam } from "../http.js";
+import {
+  addTeam,
+  addUser,
+  deleteTeam,
+  getTeamList,
+  getUserList,
+  updateTeam,
+} from "../http.js";
 export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
   const [selectedTeam, setSelectedTeam] = useState({
     teamId: "",
@@ -69,7 +76,15 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
 
   useEffect(() => {
     if (selectedTeam && teamData[selectedTeam]) {
-      setUserOptions(Object.values(teamData[selectedTeam].users));
+      const fetchUserList = async () => {
+        try {
+          const userList = await getUserList();
+          setUserOptions(userList);
+        } catch (error) {
+          console.error("Failed to fetch user list:", error);
+        }
+      };
+      fetchUserList();
     } else {
       setUserOptions([]);
     }
@@ -116,14 +131,16 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     }
   };
 
-  const handleTeamChange = (event) => {
+  const handleTeamChange = async (event) => {
     const teamId = event.target.value;
     const name = event.target.options[event.target.selectedIndex].text;
     setSelectedTeam({ teamId, name });
-    setSelectedUser({
-      name: "",
-      email: "",
-    });
+
+    // await getUserList(teamId);
+    // setSelectedUser({
+    //   name: "",
+    //   email: "",
+    // });
     // if (teamId && teamData[teamId]) {
     //   setUserOptions(Object.values(teamData[team].users));
     // } else {
@@ -163,6 +180,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       const newTeamKey = `team-${uuidv4()}`;
 
       await addTeam(teamName, newTeamKey);
+      setFetchResult((prev) => !prev);
       handleCloseModal();
     } catch (error) {
       console.error("Error add Team:", error);
@@ -223,7 +241,10 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
   const handleDeleteData = async (type) => {
     if (selectedTeam && type === "team") {
       try {
+        const isConfirmed = window.confirm("정말 삭제하시겠습니까?");
+        if (!isConfirmed) return;
         await deleteTeam(selectedTeam.teamId);
+        setFetchResult((prev) => !prev);
       } catch (error) {
         console.error("Error delete Team:", error);
         alert("팀을 삭제하는 중 오류가 발생했습니다.");
@@ -245,7 +266,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     }
   };
 
-  const handleAddUser = () => {
+  const handleAddUser = async () => {
     const userName = assignUserName.current.value;
     const userEmail = assignUserEmail.current.value;
 
@@ -263,29 +284,8 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       alert("팀을 선택해주세요.");
       return;
     }
-
-    const userKey = userEmail.split("@")[0]; // 이메일에서 @ 기준으로 왼쪽 추출
-    // const userKey = userEmail; // 이메일에서 @ 기준으로 왼쪽 추출
-
-    setTeamData((prevData) => {
-      // 중복 사용자 확인
-      if (prevData[selectedTeam].users[userKey]) {
-        alert("이미 존재하는 사용자입니다.");
-        return prevData;
-      }
-
-      // 새로운 사용자 추가
-      return {
-        ...prevData, // 기존 데이터를 유지
-        [selectedTeam]: {
-          ...prevData[selectedTeam], // 선택된 팀 데이터를 유지
-          users: {
-            ...prevData[selectedTeam].users, // 기존 사용자 데이터 유지
-            [userKey]: { email: userEmail, name: userName }, // 새로운 사용자 추가
-          },
-        },
-      };
-    });
+    await addUser(userName, userEmail, selectedTeam.teamId);
+    setFetchResult((prev) => !prev);
     setEmailIsInvalid(false);
     handleCloseModal();
   };

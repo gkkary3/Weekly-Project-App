@@ -3,6 +3,7 @@ const submitTeam = JSON.parse(localStorage.getItem("submitTeam")) || {};
 const teamId = submitTeam.team?.id;
 const email = submitTeam.userInfo?.email;
 
+/* 주간보고 */
 export async function getWeeklyReport() {
   try {
     if (!teamId || !email) {
@@ -91,6 +92,7 @@ export async function deleteWeeklyReport(reportId) {
   }
 }
 
+/* 팀 */
 export async function getTeamList() {
   try {
     const response = await fetch(
@@ -154,6 +156,65 @@ export async function deleteTeam(teamId) {
   try {
     const response = await fetch(
       `https://weekly-project-app.onrender.com/api/Weekly-Project-App/deleteTeam/${teamId}`,
+      // `http://localhost:3000/api/Weekly-Project-App/deleteTeam/${teamId}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete the team");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error deleting team:", error);
+    throw error;
+  }
+}
+
+/* 사용자 */
+export async function getUserList() {
+  try {
+    const response = await fetch(
+      `https://weekly-project-app.onrender.com/api/Weekly-Project-App/getUserList?teamId=${teamId}`
+      // `http://localhost:3000/api/Weekly-Project-App/getUserList?teamId=${teamId}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch getUserList");
+    }
+    return await response.json(); // 필터링된 데이터 반환
+  } catch (error) {
+    console.error("Error fetching getUserList:", error);
+    return [];
+  }
+}
+
+export async function addUser(name, email, teamId) {
+  const response = await fetch(
+    "https://weekly-project-app.onrender.com/api/Weekly-Project-App/addUser",
+    // "http://localhost:3000/api/Weekly-Project-App/addUser",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, teamId }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to add team");
+  }
+
+  return response.json();
+}
+
+export async function deleteUser(email) {
+  try {
+    const response = await fetch(
+      `https://weekly-project-app.onrender.com/api/Weekly-Project-App/deleteUser/${email}`,
       // `http://localhost:3000/api/Weekly-Project-App/deleteTeam/${teamId}`,
       {
         method: "DELETE",
