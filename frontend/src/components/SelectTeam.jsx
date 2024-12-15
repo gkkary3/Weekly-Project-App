@@ -75,10 +75,10 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
   }, [submitTeamData]);
 
   useEffect(() => {
-    if (selectedTeam && teamData[selectedTeam]) {
+    if (selectedTeam) {
       const fetchUserList = async () => {
         try {
-          const userList = await getUserList();
+          const userList = await getUserList(selectedTeam.teamId);
           setUserOptions(userList);
         } catch (error) {
           console.error("Failed to fetch user list:", error);
@@ -88,7 +88,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     } else {
       setUserOptions([]);
     }
-  }, [teamData, selectedTeam]); // teamData나 selectedTeam이 변경될 때마다 실행
+  }, [selectedTeam]); // teamData나 selectedTeam이 변경될 때마다 실행
 
   useEffect(() => {
     window.localStorage.setItem("teamData", JSON.stringify(teamData));
