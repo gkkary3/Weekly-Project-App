@@ -6,6 +6,7 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import Report from "./models/Report.js";
 import Team from "./models/Team.js";
+import User from "./models/User.js";
 
 const app = express();
 connectDB();
@@ -32,7 +33,6 @@ app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
   }
 
   try {
-    // 팀 ID와 이메일로 데이터 검색
     const reports = await Report.find({ teamId, email });
     res.status(200).json(reports);
   } catch (error) {
@@ -49,7 +49,6 @@ app.post("/api/Weekly-Project-App/user-report", async (req, res) => {
   }
 
   try {
-    // 데이터베이스에 새로운 레포트 추가
     const newReport = new Report({
       teamId,
       email,
@@ -77,7 +76,7 @@ app.put("/api/Weekly-Project-App/user-report", async (req, res) => {
     const updatedReport = await Report.findByIdAndUpdate(
       reportId,
       { formData },
-      { new: true } // 업데이트된 문서를 반환
+      { new: true }
     );
     if (!updatedReport) {
       return res.status(404).json({ error: "Report not found." });
@@ -122,13 +121,8 @@ app.post("/api/Weekly-Project-App/addTeam", async (req, res) => {
   const { name, teamId } = req.body;
 
   try {
-    // MongoDB에 저장할 Team 모델 생성 (Team 스키마가 필요함)
     const team = new Team({ name, teamId });
-
-    // 데이터 저장
     const savedTeam = await team.save();
-
-    // 성공 응답
     res.status(201).json({
       message: "Team added successfully!",
       team: savedTeam,
@@ -151,7 +145,7 @@ app.put("/api/Weekly-Project-App/updateTeam", async (req, res) => {
     const updatedTeam = await Team.findOneAndUpdate(
       { teamId },
       { name },
-      { new: true } // 업데이트된 문서를 반환
+      { new: true }
     );
     if (!updatedTeam) {
       return res.status(404).json({ error: "Report not found." });
@@ -179,4 +173,52 @@ app.delete("/api/Weekly-Project-App/deleteTeam/:id", async (req, res) => {
   }
 });
 
+/* User */
+// GET 요청 처리
+app.get("/api/Weekly-Project-App/getUserList", async (req, res) => {
+  try {
+    // 팀 ID와 이메일로 데이터 검색
+    const { teamId } = req.body;
+    const userList = await User.find({ teamId });
+    res.status(200).json(userList);
+  } catch (error) {
+    res.status(500).json({ error: "Error retrieving userList." });
+  }
+});
+
+// POST 요청 처리
+app.post("/api/Weekly-Project-App/addUser", async (req, res) => {
+  const { name, email, teamId } = req.body;
+
+  try {
+    const user = new User({ name, email, teamId });
+
+    // 데이터 저장
+    const savedUser = await user.save();
+
+    // 성공 응답
+    res.status(201).json({
+      message: "User added successfully!",
+      team: savedUser,
+    });
+  } catch (error) {
+    console.error("Error adding user:", error);
+    res.status(500).json({ error: "Failed to add user." });
+  }
+});
+
+// DELETE 요청 처리
+app.delete("/api/Weekly-Project-App/deleteUser/:id", async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const deletedUser = await User.findOneAndDelete(email);
+    if (!deletedUser) {
+      return res.status(404).json({ error: "User not found." });
+    }
+    res.status(200).json({ message: "User deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting User." });
+  }
+});
 app.listen(3000, () => console.log("Server is running on portss 3000"));
