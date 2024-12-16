@@ -88,7 +88,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     } else {
       setUserOptions([]);
     }
-  }, [selectedTeam]); // teamData나 selectedTeam이 변경될 때마다 실행
+  }, [selectedTeam, fetchResult]); // teamData나 selectedTeam이 변경될 때마다 실행
 
   useEffect(() => {
     window.localStorage.setItem("teamData", JSON.stringify(teamData));
