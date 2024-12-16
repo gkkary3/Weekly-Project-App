@@ -209,8 +209,8 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
 
       try {
         await updateUser(
-          selectedTeam.id,
-          selectedTeam.teamId,
+          selectedUser.id,
+          selectedUser.teamId,
           userName,
           userEmail
         );

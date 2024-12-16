@@ -226,7 +226,7 @@ export async function updateUser(id, teamId, name, email) {
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Failed to update report");
+    throw new Error(error.message || "Failed to update user");
   }
 
   return response.json();
