@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { addWeeklyReport } from "../http.js";
 
-export default function WeeklyReportForm({ handlefetchResult }) {
+const WeeklyReportForm = memo(({ handlefetchResult }) => {
   // 상태 초기화
   const [formData, setFormData] = useState({
     startDate: null,
@@ -123,4 +123,6 @@ export default function WeeklyReportForm({ handlefetchResult }) {
       </button>
     </div>
   );
-}
+});
+
+export default WeeklyReportForm;

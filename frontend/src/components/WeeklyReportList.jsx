@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import DatePicker from "react-datepicker";
 import {
   getWeeklyReport,
@@ -8,7 +8,7 @@ import {
 import { PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/20/solid"; // Import X icon for cancel
 import { format } from "date-fns";
 
-export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
+const WeeklyReportList = memo(({ handlefetchResult, fetchResult }) => {
   const [reports, setReports] = useState([]);
   const [editingReport, setEditingReport] = useState(null); // Track the report being edited
   const [editedData, setEditedData] = useState({}); // Track edited data
@@ -241,4 +241,6 @@ export default function WeeklyReportList({ handlefetchResult, fetchResult }) {
       )}
     </div>
   );
-}
+});
+
+export default WeeklyReportList;

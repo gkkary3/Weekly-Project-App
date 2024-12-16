@@ -199,6 +199,15 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       try {
         const teamName = assignTeam.current.value;
         await updateTeam(identifier, teamName);
+        setSelectedUser((prev) => {
+          if (prev.teamId === identifier) {
+            return {
+              ...prev,
+              name: teamName,
+            };
+          }
+          return prev;
+        });
       } catch (error) {
         console.error("Error update Team:", error);
         alert("팀을 수정하는 중 오류가 발생했습니다.");
