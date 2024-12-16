@@ -340,9 +340,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
               className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               ref={assignUserName}
               {...(action === "update" && {
-                defaultValue:
-                  teamData[selectedTeam].users[selectedUser.email.split("@")[0]]
-                    .name,
+                defaultValue: selectedUser.name,
               })}
             />
             <input
@@ -351,9 +349,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
               className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               ref={assignUserEmail}
               {...(action === "update" && {
-                defaultValue:
-                  teamData[selectedTeam].users[selectedUser.email.split("@")[0]]
-                    .email,
+                defaultValue: selectedUser.email,
               })}
             />
             <div className="control-error">
