@@ -5,6 +5,7 @@ import {
   addTeam,
   addUser,
   deleteTeam,
+  deleteUser,
   getTeamList,
   getUserList,
   updateTeam,
@@ -222,31 +223,24 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
   };
 
   const handleDeleteData = async (type) => {
+    const isConfirmed = window.confirm("정말 삭제하시겠습니까?");
+    if (!isConfirmed) return;
     if (selectedTeam && type === "team") {
       try {
-        const isConfirmed = window.confirm("정말 삭제하시겠습니까?");
-        if (!isConfirmed) return;
         await deleteTeam(selectedTeam.teamId);
-        setFetchResult((prev) => !prev);
       } catch (error) {
         console.error("Error delete Team:", error);
         alert("팀을 삭제하는 중 오류가 발생했습니다.");
       }
     } else if (selectedTeam && selectedUser.email && type === "user") {
-      setTeamData((prevData) => {
-        const updatedUsers = { ...prevData[selectedTeam].users };
-        const userKey = selectedUser.email.split("@")[0];
-        delete updatedUsers[userKey];
-        // 상위 teamData에 반영
-        return {
-          ...prevData,
-          [selectedTeam]: {
-            ...prevData[selectedTeam],
-            users: updatedUsers,
-          },
-        };
-      });
+      try {
+        await deleteUser(selectedUser.email);
+      } catch (error) {
+        console.error("Error delete User:", error);
+        alert("사용자를 삭제하는 중 오류가 발생했습니다.");
+      }
     }
+    setFetchResult((prev) => !prev);
   };
 
   const handleAddUser = async () => {
