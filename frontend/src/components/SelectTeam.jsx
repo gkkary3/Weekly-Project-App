@@ -8,6 +8,7 @@ import {
   getTeamList,
   getUserList,
   updateTeam,
+  updateUser,
 } from "../http.js";
 export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
   const [selectedTeam, setSelectedTeam] = useState({
@@ -15,6 +16,8 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     name: "",
   });
   const [selectedUser, setSelectedUser] = useState({
+    id: "",
+    teamId: "",
     name: "",
     email: "",
   });
@@ -108,6 +111,8 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     var selectedUser = userOptions.find((user) => user.email === userEmail);
     setSelectedUser((prevSelectedUser) => ({
       ...prevSelectedUser,
+      id: selectedUser ? selectedUser._id : "",
+      teamId: selectedUser ? selectedUser.teamId : "",
       name: selectedUser ? selectedUser.name : "",
       email: selectedUser ? selectedUser.email : "",
     }));
@@ -193,7 +198,6 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       try {
         const teamName = assignTeam.current.value;
         await updateTeam(identifier, teamName);
-        setFetchResult((prev) => !prev);
       } catch (error) {
         console.error("Error update Team:", error);
         alert("팀을 수정하는 중 오류가 발생했습니다.");
@@ -202,39 +206,18 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       const userName = assignUserName.current.value;
       const userEmail = assignUserEmail.current.value;
 
-      setTeamData((prevData) => {
-        const oldKey = identifier.email.split("@")[0];
-        const newKey = userEmail.split("@")[0];
-
-        const updatedUsers = { ...prevData[selectedTeam].users };
-
-        // 이메일이 변경되었는지 확인
-        if (oldKey === newKey) {
-          // 이메일이 동일한 경우: 키 유지, 값만 업데이트
-          updatedUsers[oldKey] = {
-            ...updatedUsers[oldKey],
-            name: userName,
-            email: userEmail, // 혹시 이메일 필드도 업데이트 필요하다면 포함
-          };
-        } else {
-          // 이메일이 변경된 경우: 기존 키 삭제, 새 키 추가
-          delete updatedUsers[oldKey];
-          updatedUsers[newKey] = {
-            name: userName,
-            email: userEmail,
-          };
-        }
-
-        return {
-          ...prevData,
-          [selectedTeam]: {
-            ...prevData[selectedTeam],
-            users: updatedUsers,
-          },
-        };
-      });
+      try {
+        await updateUser(
+          selectedTeam.id,
+          selectedTeam.teamId,
+          userName,
+          userEmail
+        );
+      } catch (error) {
+        console.error("Error update User:", error);
+      }
     }
-
+    setFetchResult((prev) => !prev);
     handleCloseModal();
   };
 

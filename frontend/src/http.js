@@ -211,6 +211,27 @@ export async function addUser(name, email, teamId) {
   return response.json();
 }
 
+export async function updateUser(id, teamId, name, email) {
+  const response = await fetch(
+    "https://weekly-project-app.onrender.com/api/Weekly-Project-App/updateUser",
+    // "http://localhost:3000/api/Weekly-Project-App/updateTeam",
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, teamId, name, email }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to update report");
+  }
+
+  return response.json();
+}
+
 export async function deleteUser(email) {
   try {
     const response = await fetch(

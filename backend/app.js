@@ -208,6 +208,32 @@ app.post("/api/Weekly-Project-App/addUser", async (req, res) => {
   }
 });
 
+// PUT 요청 처리
+app.put("/api/Weekly-Project-App/updateUser", async (req, res) => {
+  const { id, teamId, name, email } = req.body;
+
+  if (!teamId || !name) {
+    return res.status(400).json({ error: "Team ID and name are required." });
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { name },
+      { email },
+      { new: true }
+    );
+    if (!updatedTeam) {
+      return res.status(404).json({ error: "User not found." });
+    }
+    res
+      .status(200)
+      .json({ message: "User updated successfully!", updatedUser });
+  } catch (error) {
+    res.status(500).json({ error: "Error updating user." });
+  }
+});
+
 // DELETE 요청 처리
 app.delete("/api/Weekly-Project-App/deleteUser/:email", async (req, res) => {
   const { email } = req.params;
