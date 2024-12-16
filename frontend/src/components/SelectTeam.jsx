@@ -126,8 +126,8 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       setSubmitTeam((prevSubmitTeam) => ({
         ...prevSubmitTeam,
         team: {
-          name: teamData[selectedTeam].name,
-          id: selectedTeam,
+          name: selectedTeam.name,
+          id: selectedTeam.teamId,
         },
         userInfo: {
           name: selectedUser.name,
