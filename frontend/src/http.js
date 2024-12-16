@@ -174,7 +174,7 @@ export async function deleteTeam(teamId) {
 }
 
 /* 사용자 */
-export async function getUserList() {
+export async function getUserList(teamId) {
   try {
     const response = await fetch(
       `https://weekly-project-app.onrender.com/api/Weekly-Project-App/getUserList?teamId=${teamId}`
