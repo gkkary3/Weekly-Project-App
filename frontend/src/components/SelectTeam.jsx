@@ -218,8 +218,8 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
           if (prev.id === selectedUser.id) {
             return {
               ...prev,
-              userName: assignUserName.current.value,
-              userEmail: assignUserEmail.current.value,
+              name: assignUserName.current.value,
+              email: assignUserEmail.current.value,
             };
           }
           return prev;
