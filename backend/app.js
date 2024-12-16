@@ -179,7 +179,7 @@ app.get("/api/Weekly-Project-App/getUserList", async (req, res) => {
   try {
     // 팀 ID와 이메일로 데이터 검색
     const { teamId } = req.query;
-    const userList = await User.find({ teamId });
+    const userList = await User.getUserListByTeamId({ teamId });
     res.status(200).json(userList);
   } catch (error) {
     res.status(500).json({ error: "Error retrieving userList." });
@@ -208,7 +208,7 @@ app.post("/api/Weekly-Project-App/addUser", async (req, res) => {
 });
 
 // DELETE 요청 처리
-app.delete("/api/Weekly-Project-App/deleteUser/:id", async (req, res) => {
+app.delete("/api/Weekly-Project-App/deleteUser/:email", async (req, res) => {
   const { email } = req.params;
 
   try {
