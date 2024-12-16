@@ -179,7 +179,8 @@ app.get("/api/Weekly-Project-App/getUserList", async (req, res) => {
   try {
     // 팀 ID와 이메일로 데이터 검색
     const { teamId } = req.query;
-    const userList = await User.getUserListByTeamId({ teamId });
+    console.log(teamId);
+    const userList = await User.find({ teamId });
     res.status(200).json(userList);
   } catch (error) {
     res.status(500).json({ error: "Error retrieving userList." });
