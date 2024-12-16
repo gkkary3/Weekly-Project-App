@@ -218,11 +218,11 @@ app.put("/api/Weekly-Project-App/updateUser", async (req, res) => {
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      ObjectId(id),
+      id,
       { name, email }, // 하나의 객체로 합쳐야함
       { new: true }
     );
-    if (!updatedTeam) {
+    if (!updatedUser) {
       return res.status(404).json({ error: "User not found." });
     }
     res
