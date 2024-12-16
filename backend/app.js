@@ -219,8 +219,7 @@ app.put("/api/Weekly-Project-App/updateUser", async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { name },
-      { email },
+      { name, email }, // 하나의 객체로 합쳐야함
       { new: true }
     );
     if (!updatedTeam) {
