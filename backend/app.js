@@ -178,7 +178,7 @@ app.delete("/api/Weekly-Project-App/deleteTeam/:id", async (req, res) => {
 app.get("/api/Weekly-Project-App/getUserList", async (req, res) => {
   try {
     // 팀 ID와 이메일로 데이터 검색
-    const { teamId } = req.body;
+    const { teamId } = req.query;
     const userList = await User.find({ teamId });
     res.status(200).json(userList);
   } catch (error) {
