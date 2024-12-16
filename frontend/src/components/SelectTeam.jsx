@@ -214,6 +214,16 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
           userName,
           userEmail
         );
+        setSelectedUser((prev) => {
+          if (prev.id === selectedUser.id) {
+            return {
+              ...prev,
+              userName: userName,
+              userEmail: userEmail,
+            };
+          }
+          return prev;
+        });
       } catch (error) {
         console.error("Error update User:", error);
       }
