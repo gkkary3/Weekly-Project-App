@@ -94,7 +94,7 @@ app.delete("/api/Weekly-Project-App/user-report/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deletedReport = await Report.findByIdAndDelete(id);
+    const deletedReport = await Report.findByIdAndDelete({ id });
     if (!deletedReport) {
       return res.status(404).json({ error: "Report not found." });
     }
@@ -159,11 +159,11 @@ app.put("/api/Weekly-Project-App/updateTeam", async (req, res) => {
 });
 
 // DELETE 요청 처리
-app.delete("/api/Weekly-Project-App/deleteTeam/:id", async (req, res) => {
+app.delete("/api/Weekly-Project-App/deleteTeam/:teamId", async (req, res) => {
   const { teamId } = req.params;
 
   try {
-    const deletedTeam = await Team.findOneAndDelete(teamId);
+    const deletedTeam = await Team.findOneAndDelete({ teamId });
     if (!deletedTeam) {
       return res.status(404).json({ error: "Taem not found." });
     }
@@ -213,7 +213,7 @@ app.delete("/api/Weekly-Project-App/deleteUser/:email", async (req, res) => {
   const { email } = req.params;
 
   try {
-    const deletedUser = await User.findOneAndDelete(email);
+    const deletedUser = await User.findOneAndDelete({ email });
     if (!deletedUser) {
       return res.status(404).json({ error: "User not found." });
     }
