@@ -52,7 +52,10 @@ const WeeklyReportList = memo(({ handlefetchResult, fetchResult }) => {
   };
 
   useEffect(() => {
-    if (editedData.endDate && editedData.startDate > editedData.endDate) {
+    if (
+      editedData.endDate &&
+      new Date(editedData.startDate) > new Date(editedData.endDate)
+    ) {
       alert("종료 날짜를 확인해주세요.");
       setEditedData((prev) => ({ ...prev, endDate: null }));
     }
