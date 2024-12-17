@@ -280,7 +280,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     if (selectedTeam && type === "team") {
       try {
         await deleteTeam(selectedTeam.teamId);
-        setSelectedTeam(null);
+        setSelectedTeam({ teamId: "", name: "" });
       } catch (error) {
         console.error("Error delete Team:", error);
         alert("팀을 삭제하는 중 오류가 발생했습니다.");
@@ -289,7 +289,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       try {
         await deleteUser(selectedUser.email);
         // setUserOptions(null);
-        setSelectedUser(null);
+        setSelectedUser({ id: "", teamId: "", name: "", email: "" });
       } catch (error) {
         console.error("Error delete User:", error);
         alert("사용자를 삭제하는 중 오류가 발생했습니다.");
