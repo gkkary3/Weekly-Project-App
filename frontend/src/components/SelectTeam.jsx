@@ -393,22 +393,24 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
                 defaultValue: selectedUser?.name,
               })}
             />
-            <input
-              type="email"
-              placeholder="이메일을 입력하세요"
-              className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-              ref={assignUserEmail}
-              {...(action === "update" && {
-                defaultValue: selectedUser?.email,
-              })}
-            />
-            <div className="control-error">
-              {emailIsInvalid && (
-                <p className="mb-3 text-sm text-red-500">
-                  유효한 이메일 주소를 입력해주세요.
-                </p>
-              )}
-            </div>
+            {/* 이메일 입력 필드: action === "add"일 때만 렌더링 */}
+            {action === "add" && (
+              <>
+                <input
+                  type="email"
+                  placeholder="이메일을 입력하세요"
+                  className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  ref={assignUserEmail}
+                />
+                <div className="control-error">
+                  {emailIsInvalid && (
+                    <p className="mb-3 text-sm text-red-500">
+                      유효한 이메일 주소를 입력해주세요.
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
             <button
               onClick={
                 action === "add"

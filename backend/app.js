@@ -26,17 +26,14 @@ app.use(express.urlencoded({ extended: true }));
 /* Report */
 // GET 요청 처리
 app.get("/api/Weekly-Project-App/user-report", async (req, res) => {
-  const { teamId, id } = req.query;
+  const { teamId, email } = req.query;
 
-  if (!teamId || !id) {
-    return res.status(400).json({ error: "Team ID and id are required." });
+  if (!teamId || !email) {
+    return res.status(400).json({ error: "Team ID and email are required." });
   }
 
   try {
-    const reports = await Report.find({
-      teamId: teamId,
-      _id: new ObjectId(id),
-    });
+    const reports = await Report.find({ teamId, email });
     res.status(200).json(reports);
   } catch (error) {
     res.status(500).json({ error: "Error retrieving reports." });
