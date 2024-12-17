@@ -1,5 +1,14 @@
 # 팀 주간 보고 프로젝트
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/2000ad33-dc30-4797-8b45-3635dd560cd4" alt="userName" width="250"/>
+  <img src="https://github.com/user-attachments/assets/a92b7fe7-8bac-4db6-8d08-2a974208179f" alt="welcome" width="250"/>
+</p>
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/d385f845-5621-4b95-a13a-022eaa3e1789" alt="notSelectedProject" width="250"/>
+  <img src="https://github.com/user-attachments/assets/653d67dc-4f9b-40dc-89c6-7bc6c45fd5d4" alt="newProject" width="250"/>
+  <img src="https://github.com/user-attachments/assets/aa32994a-de9f-4d0e-ba6a-1e05f288f27b" alt="detaildProject" width="250"/>
+</p>
 ## 프로젝트 소개
 이 프로젝트는 회사에서 매주 주간 업무를 엑셀로 작성하여 보고하는 방식에서 벗어나, **웹 어플리케이션**으로 이를 관리하고자 만들어졌습니다. 주간 업무 보고는 많은 팀원들이 각자 업무를 기록하고 제출하는 과정에서 비효율적인 부분이 많았습니다. 이를 개선하기 위해 팀과 이름을 선택하고, 주간 업무를 작성하는 기능을 가진 웹 애플리케이션을 개발하게 되었습니다.
 
