@@ -51,6 +51,13 @@ const WeeklyReportForm = memo(({ handlefetchResult }) => {
 
       await addWeeklyReport(formData);
       alert("보고서가 성공적으로 저장되었습니다!");
+      setFormData((prev) => ({
+        ...prev,
+        startDate: null,
+        endDate: null,
+        content: "",
+        note: "",
+      }));
       handlefetchResult();
     } catch (error) {
       console.error("Error updating report:", error);
