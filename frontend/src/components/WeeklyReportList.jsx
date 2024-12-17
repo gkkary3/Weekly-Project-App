@@ -54,7 +54,7 @@ const WeeklyReportList = memo(({ handlefetchResult, fetchResult }) => {
   useEffect(() => {
     if (editedData.endDate && editedData.startDate > editedData.endDate) {
       alert("종료 날짜를 확인해주세요.");
-      editedData((prev) => ({ ...prev, endDate: null }));
+      setEditedData((prev) => ({ ...prev, endDate: null }));
     }
   }, [editedData.endDate, editedData.startDate]);
 
@@ -184,10 +184,10 @@ const WeeklyReportList = memo(({ handlefetchResult, fetchResult }) => {
                         placeholder="내용을 입력하세요..."
                       ></textarea>
                       <div
-                        className={`text-right mt-1 ${
+                        className={`text-right text-sm mt-1 ${
                           editedData.content.length > 1000
                             ? "text-red-500"
-                            : "text-white"
+                            : "text-black"
                         }`}
                       >
                         {editedData.content.length}/1000
@@ -209,10 +209,10 @@ const WeeklyReportList = memo(({ handlefetchResult, fetchResult }) => {
                         placeholder="비고를 입력하세요..."
                       ></textarea>
                       <div
-                        className={`text-right mt-1 ${
+                        className={`text-right text-sm mt-1 ${
                           editedData.note.length > 500
                             ? "text-red-500"
-                            : "text-white"
+                            : "text-black"
                         }`}
                       >
                         {editedData.note.length}/500

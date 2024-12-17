@@ -109,7 +109,7 @@ const WeeklyReportForm = memo(({ handlefetchResult }) => {
           placeholder="내용을 입력하세요..."
         ></textarea>
         <div
-          className={`text-right mt-1 ${
+          className={`text-right text-sm mt-1 ${
             formData.content.length > 1000 ? "text-red-500" : "text-white"
           }`}
         >
@@ -129,7 +129,7 @@ const WeeklyReportForm = memo(({ handlefetchResult }) => {
           placeholder="비고를 입력하세요..."
         ></textarea>
         <div
-          className={`text-right mt-1 ${
+          className={`text-right text-sm mt-1 ${
             formData.note.length > 500 ? "text-red-500" : "text-white"
           }`}
         >
