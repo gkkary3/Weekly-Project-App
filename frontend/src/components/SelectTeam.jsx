@@ -268,6 +268,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       try {
         await deleteUser(selectedUser.email);
         // setUserOptions(null);
+        setSelectedUser(null);
       } catch (error) {
         console.error("Error delete User:", error);
         alert("사용자를 삭제하는 중 오류가 발생했습니다.");
@@ -354,7 +355,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
               className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               ref={assignUserName}
               {...(action === "update" && {
-                defaultValue: selectedUser.name,
+                defaultValue: selectedUser?.name,
               })}
             />
             <input
@@ -363,7 +364,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
               className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               ref={assignUserEmail}
               {...(action === "update" && {
-                defaultValue: selectedUser.email,
+                defaultValue: selectedUser?.email,
               })}
             />
             <div className="control-error">
