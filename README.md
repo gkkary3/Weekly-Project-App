@@ -37,6 +37,3 @@
 
 ## 문제 해결 능력
 처음에 Vercel에 backend 소스와 frontend 소스를 같이 배포하려니 동작이 원활하지 않았습니다. 이를 해결하기 위해 backend와 frontend의 Root Directory를 각각 Vercel(frontend)과 Render(backend)에 배포하였고, 이로 인해 동작이 원활하게 되었습니다.
-```
-
-이렇게 작성하시면 됩니다! 도움이 필요하시면 언제든지 말씀해 주세요. 😊
