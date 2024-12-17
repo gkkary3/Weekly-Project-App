@@ -8,7 +8,7 @@
   <img src="https://github.com/user-attachments/assets/7bf8cc75-b6f6-47ff-b4bc-9993d092b720" alt="notSelectedProject" width="250" height="210"/>
   <img src="https://github.com/user-attachments/assets/dd53ab67-3a2d-4aee-a414-03585878284a" alt="newProject" width="250" height="210"/>
   <img src="https://github.com/user-attachments/assets/6bce57f1-92eb-4ea2-b6cc-1bfc6860e2d7" alt="detaildProject" width="250" height="210"/>
-</p>![image](https://github.com/user-attachments/assets/e96836ce-f8d7-4c61-b301-a75e70dd366a)
+</p>
 
 ## 프로젝트 소개
 이 프로젝트는 회사에서 매주 주간 업무를 엑셀로 작성하여 보고하는 방식에서 벗어나, **웹 어플리케이션**으로 이를 관리하고자 만들어졌습니다. 주간 업무 보고는 많은 팀원들이 각자 업무를 기록하고 제출하는 과정에서 비효율적인 부분이 많았습니다. 이를 개선하기 위해 팀과 이름을 선택하고, 주간 업무를 작성하는 기능을 가진 웹 애플리케이션을 개발하게 되었습니다.
