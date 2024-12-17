@@ -5,13 +5,13 @@ import {
   deleteWeeklyReport,
   updateWeeklyReport,
 } from "../http.js";
-import { PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/20/solid"; // Import X icon for cancel
+import { PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { format } from "date-fns";
 
 const WeeklyReportList = memo(({ handlefetchResult, fetchResult }) => {
   const [reports, setReports] = useState([]);
-  const [editingReport, setEditingReport] = useState(null); // Track the report being edited
-  const [editedData, setEditedData] = useState({}); // Track edited data
+  const [editingReport, setEditingReport] = useState(null);
+  const [editedData, setEditedData] = useState({});
   useEffect(() => {
     // 비동기로 데이터 가져오기
     const fetchReports = async () => {
@@ -42,7 +42,7 @@ const WeeklyReportList = memo(({ handlefetchResult, fetchResult }) => {
   };
 
   const handleEdit = (report) => {
-    setEditingReport(report._id); // Set editing report
+    setEditingReport(report._id);
     setEditedData({
       startDate: report.formData.startDate,
       endDate: report.formData.endDate,
@@ -51,16 +51,43 @@ const WeeklyReportList = memo(({ handlefetchResult, fetchResult }) => {
     });
   };
 
+  useEffect(() => {
+    if (editedData.endDate && editedData.startDate > editedData.endDate) {
+      alert("종료 날짜를 확인해주세요.");
+      editedData((prev) => ({ ...prev, endDate: null }));
+    }
+  }, [editedData.endDate, editedData.startDate]);
+
   const handleCancelEdit = () => {
-    setEditingReport(null); // Reset editing state
-    setEditedData({}); // Clear edited data
+    setEditingReport(null);
+    setEditedData({});
   };
 
   const handleSaveEdit = async () => {
     try {
+      if (!editedData.endDate || !editedData.startDate) {
+        alert("날짜를 확인해주세요.");
+        return;
+      }
+
+      if (!editedData.content) {
+        alert("내용을 확인해주세요.");
+        return;
+      }
+
+      if (editedData.content.length > 1000) {
+        alert("내용은 최대 1000글자까지 가능합니다.");
+        return;
+      }
+
+      if (editedData.note.length > 500) {
+        alert("비고는 최대 500글자까지 가능합니다.");
+        return;
+      }
+
       await updateWeeklyReport(editedData, editingReport);
-      setEditingReport(null); // Reset editing state
-      setEditedData({}); // Clear edited data
+      setEditingReport(null);
+      setEditedData({});
       handlefetchResult();
     } catch (error) {
       console.error("Error updating report:", error);
@@ -156,6 +183,15 @@ const WeeklyReportList = memo(({ handlefetchResult, fetchResult }) => {
                         className="p-2 text-gray-800 bg-white border border-gray-300 rounded bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="내용을 입력하세요..."
                       ></textarea>
+                      <div
+                        className={`text-right mt-1 ${
+                          editedData.content.length > 1000
+                            ? "text-red-500"
+                            : "text-white"
+                        }`}
+                      >
+                        {editedData.content.length}/1000
+                      </div>
                     </div>
 
                     {/* 비고 Textarea */}
@@ -172,6 +208,15 @@ const WeeklyReportList = memo(({ handlefetchResult, fetchResult }) => {
                         className="p-2 text-gray-800 bg-white border border-gray-300 rounded bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="비고를 입력하세요..."
                       ></textarea>
+                      <div
+                        className={`text-right mt-1 ${
+                          editedData.note.length > 500
+                            ? "text-red-500"
+                            : "text-white"
+                        }`}
+                      >
+                        {editedData.note.length}/500
+                      </div>
                     </div>
 
                     {/* 저장 Button */}

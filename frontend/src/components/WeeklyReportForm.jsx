@@ -40,12 +40,12 @@ const WeeklyReportForm = memo(({ handlefetchResult }) => {
       }
 
       if (formData.content.length > 1000) {
-        alert("최대 1000글자까지 가능합니다.");
+        alert("내용은 최대 1000글자까지 가능합니다.");
         return;
       }
 
       if (formData.note.length > 500) {
-        alert("최대 500글자까지 가능합니다.");
+        alert("비고는 최대 500글자까지 가능합니다.");
         return;
       }
 
