@@ -141,12 +141,12 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     const teamId = event.target.value;
     const name = event.target.options[event.target.selectedIndex].text;
     setSelectedTeam({ teamId, name });
+    setSelectedUser({
+      name: "",
+      email: "",
+    });
 
     // await getUserList(teamId);
-    // setSelectedUser({
-    //   name: "",
-    //   email: "",
-    // });
     // if (teamId && teamData[teamId]) {
     //   setUserOptions(Object.values(teamData[team].users));
     // } else {
