@@ -203,7 +203,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     if (type === "team") {
       try {
         const teamName = assignTeam.current.value;
-        if (teamData.filter((team) => team.name === teamName)) {
+        if (teamData.filter((team) => team.name === teamName).length > 0) {
           alert("팀 이름이 존재합니다.");
           return;
         }
@@ -225,7 +225,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       try {
         const userName = assignUserName.current.value;
         const userEmail = assignUserEmail.current.value;
-        if (userOptions.filter((user) => user.email === userEmail)) {
+        if (userOptions.filter((user) => user.email === userEmail).length > 0) {
           alert("사용자가 존재합니다.");
           return;
         }
@@ -281,7 +281,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     const userName = assignUserName.current.value;
     const userEmail = assignUserEmail.current.value;
 
-    if (userOptions.filter((user) => user.email === userEmail)) {
+    if (userOptions.filter((user) => user.email === userEmail).length > 0) {
       alert("사용자가 존재합니다.");
       return;
     }
