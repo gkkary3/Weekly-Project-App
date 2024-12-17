@@ -134,6 +134,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
           id: selectedTeam.teamId,
         },
         userInfo: {
+          id: selectedUser.id,
           name: selectedUser.name,
           email: selectedUser.email,
         },

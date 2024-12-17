@@ -3,13 +3,13 @@ import { getSubmitTeamData } from "./helper.js";
 /* 주간보고 */
 export async function getWeeklyReport() {
   try {
-    const { teamId, email } = getSubmitTeamData();
-    if (!teamId || !email) {
+    const { teamId, email, id } = getSubmitTeamData();
+    if (!teamId || !email || !id) {
       throw new Error("Missing teamId or email");
     }
 
     const response = await fetch(
-      `https://weekly-project-app.onrender.com/api/Weekly-Project-App/user-report?teamId=${teamId}&email=${email}`
+      `https://weekly-project-app.onrender.com/api/Weekly-Project-App/user-report?teamId=${teamId}&id=${id}`
     );
 
     if (!response.ok) {
