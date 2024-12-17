@@ -179,6 +179,11 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     try {
       var teamName = assignTeam.current.value;
 
+      if (teamName.trim().length > 30) {
+        alert("팀 이름은 최대 30글자까지 가능합니다.");
+        return;
+      }
+
       if (teamName.trim().length === 0) {
         alert("팀 이름을 확인해 주세요.");
         return;
@@ -203,6 +208,10 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     if (type === "team") {
       try {
         const teamName = assignTeam.current.value;
+        if (teamName.trim().length > 30) {
+          alert("팀 이름은 최대 30글자까지 가능합니다.");
+          return;
+        }
         if (teamData.filter((team) => team.name === teamName).length > 0) {
           alert("팀 이름이 존재합니다.");
           return;
@@ -225,7 +234,19 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       try {
         const userName = assignUserName.current.value;
         const userEmail = assignUserEmail.current.value;
-        if (userOptions.filter((user) => user.email === userEmail).length > 0) {
+
+        if (userName.trim().length > 30) {
+          alert("사용자 이름은 최대 30글자까지 가능합니다.");
+          return;
+        }
+        if (userEmail.trim().length > 100) {
+          alert("사용자 이메일은 최대 100글자까지 가능합니다.");
+          return;
+        }
+        if (
+          userOptions.filter((user) => user.email === userEmail).length > 0 &&
+          selectedUser.email !== userEmail
+        ) {
           alert("사용자가 존재합니다.");
           return;
         }
@@ -280,6 +301,15 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
   const handleAddUser = async () => {
     const userName = assignUserName.current.value;
     const userEmail = assignUserEmail.current.value;
+
+    if (userName.trim().length > 30) {
+      alert("사용자 이름은 최대 30글자까지 가능합니다.");
+      return;
+    }
+    if (userEmail.trim().length > 100) {
+      alert("사용자 이메일은 최대 100글자까지 가능합니다.");
+      return;
+    }
 
     if (userOptions.filter((user) => user.email === userEmail).length > 0) {
       alert("사용자가 존재합니다.");
@@ -489,7 +519,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
             <select
               id="name"
               name="name"
-              value={selectedUser.email}
+              value={selectedUser?.email}
               onChange={handleNameChange}
               className="w-full p-2 mt-2 text-white bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               disabled={!selectedTeam}

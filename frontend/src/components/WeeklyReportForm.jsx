@@ -39,6 +39,16 @@ const WeeklyReportForm = memo(({ handlefetchResult }) => {
         return;
       }
 
+      if (formData.content.length > 1000) {
+        alert("최대 1000글자까지 가능합니다.");
+        return;
+      }
+
+      if (formData.note.length > 500) {
+        alert("최대 500글자까지 가능합니다.");
+        return;
+      }
+
       await addWeeklyReport(formData);
       alert("보고서가 성공적으로 저장되었습니다!");
       handlefetchResult();
@@ -98,6 +108,13 @@ const WeeklyReportForm = memo(({ handlefetchResult }) => {
           className="p-2 text-gray-800 bg-white border border-gray-300 rounded scrollbar-custom bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="내용을 입력하세요..."
         ></textarea>
+        <div
+          className={`text-right mt-1 ${
+            formData.content.length > 1000 ? "text-red-500" : "text-white"
+          }`}
+        >
+          {formData.content.length}/1000
+        </div>
       </div>
 
       {/* 비고 작성 */}
@@ -111,6 +128,13 @@ const WeeklyReportForm = memo(({ handlefetchResult }) => {
           className="p-2 text-gray-800 bg-white border border-gray-300 rounded scrollbar-custom bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="비고를 입력하세요..."
         ></textarea>
+        <div
+          className={`text-right mt-1 ${
+            formData.note.length > 500 ? "text-red-500" : "text-white"
+          }`}
+        >
+          {formData.note.length}/500
+        </div>
       </div>
 
       {/* 제출 버튼 */}
