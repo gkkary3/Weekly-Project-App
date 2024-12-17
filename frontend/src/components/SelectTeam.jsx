@@ -86,10 +86,13 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     if (selectedTeam) {
       const fetchUserList = async () => {
         try {
+          setIsLoading(true);
           const userList = await getUserList(selectedTeam.teamId);
           setUserOptions(userList);
         } catch (error) {
           console.error("Failed to fetch user list:", error);
+        } finally {
+          setIsLoading(false);
         }
       };
       fetchUserList();
