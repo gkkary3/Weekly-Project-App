@@ -9,7 +9,7 @@ export async function getWeeklyReport() {
     }
 
     const response = await fetch(
-      `https://weekly-project-app.onrender.com/api/Weekly-Project-App/user-report?teamId=${teamId}&id=${id}`
+      `https://weekly-project-app.onrender.com/api/Weekly-Project-App/user-report?teamId=${teamId}&email=${email}`
     );
 
     if (!response.ok) {
