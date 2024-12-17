@@ -560,7 +560,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
         {/* 로딩 상태 모달 */}
         {isLoading && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="p-6 bg-gray-800 rounded-lg shadow-lg">
+            <div className="p-6  rounded-lg shadow-lg">
               <div className="flex items-center justify-center">
                 <div className="w-8 h-8 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
               </div>
