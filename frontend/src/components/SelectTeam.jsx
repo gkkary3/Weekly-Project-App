@@ -267,7 +267,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     } else if (selectedTeam && selectedUser.email && type === "user") {
       try {
         await deleteUser(selectedUser.email);
-        setUserOptions(null);
+        // setUserOptions(null);
       } catch (error) {
         console.error("Error delete User:", error);
         alert("사용자를 삭제하는 중 오류가 발생했습니다.");
@@ -454,7 +454,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
             <select
               id="team"
               name="team"
-              value={selectedTeam.teamId}
+              value={selectedTeam?.teamId}
               onChange={handleTeamChange}
               className="w-full p-2 mt-2 text-white bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
