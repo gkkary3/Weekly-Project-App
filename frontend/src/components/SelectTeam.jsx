@@ -183,6 +183,11 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
         alert("팀 이름을 확인해 주세요.");
         return;
       }
+      if (teamData.filter((team) => team.name === teamName)) {
+        alert("팀 이름이 존재합니다.");
+        return;
+      }
+
       const newTeamKey = `team-${uuidv4()}`;
 
       await addTeam(teamName, newTeamKey);
@@ -198,6 +203,10 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     if (type === "team") {
       try {
         const teamName = assignTeam.current.value;
+        if (teamData.filter((team) => team.name === teamName)) {
+          alert("팀 이름이 존재합니다.");
+          return;
+        }
         await updateTeam(identifier, teamName);
         setSelectedUser((prev) => {
           if (prev.teamId === identifier) {
@@ -213,10 +222,13 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
         alert("팀을 수정하는 중 오류가 발생했습니다.");
       }
     } else if (type === "user") {
-      const userName = assignUserName.current.value;
-      const userEmail = assignUserEmail.current.value;
-
       try {
+        const userName = assignUserName.current.value;
+        const userEmail = assignUserEmail.current.value;
+        if (userOptions.filter((user) => user.email === userEmail)) {
+          alert("사용자가 존재합니다.");
+          return;
+        }
         await updateUser(
           selectedUser.id,
           selectedUser.teamId,
@@ -247,6 +259,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     if (selectedTeam && type === "team") {
       try {
         await deleteTeam(selectedTeam.teamId);
+        setSelectedTeam(null);
       } catch (error) {
         console.error("Error delete Team:", error);
         alert("팀을 삭제하는 중 오류가 발생했습니다.");
@@ -254,6 +267,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     } else if (selectedTeam && selectedUser.email && type === "user") {
       try {
         await deleteUser(selectedUser.email);
+        setUserOptions(null);
       } catch (error) {
         console.error("Error delete User:", error);
         alert("사용자를 삭제하는 중 오류가 발생했습니다.");
@@ -266,6 +280,10 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     const userName = assignUserName.current.value;
     const userEmail = assignUserEmail.current.value;
 
+    if (userOptions.filter((user) => user.email === userEmail)) {
+      alert("사용자가 존재합니다.");
+      return;
+    }
     const emailIsvalid = userEmail.includes("@");
     if (!emailIsvalid) {
       setEmailIsInvalid(true);
