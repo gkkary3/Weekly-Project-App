@@ -67,7 +67,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
     };
 
     fetchTeamList();
-  }, [fetchResult]);
+  }, [fetchResult, teamData]);
 
   useEffect(() => {
     if (submitTeamData) {
