@@ -128,7 +128,7 @@ const WeeklyReportForm = memo(({ handlefetchResult }) => {
       <div className="flex flex-col mb-4">
         <label className="mb-2 text-sm font-medium text-white">비고</label>
         <textarea
-          rows="3"
+          rows="2.5"
           style={{ resize: "none" }}
           value={formData.note}
           onChange={(e) => handleChange("note", e.target.value)}
