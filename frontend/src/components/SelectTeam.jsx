@@ -32,6 +32,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
       email: "",
     },
   });
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
   const [userOptions, setUserOptions] = useState([]);
   const [teamData, setTeamData] = useState([]);
   const [fetchResult, setFetchResult] = useState(false);
@@ -55,10 +56,13 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
   useEffect(() => {
     const fetchTeamList = async () => {
       try {
+        setIsLoading(true);
         const teamList = await getTeamList();
         setTeamData(teamList);
       } catch (error) {
         console.error("Failed to fetch team list:", error);
+      } finally {
+        setIsLoading(false); // 로딩 종료
       }
     };
 
@@ -550,6 +554,17 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
             확인
           </button>
         </div>
+        {/* 로딩 상태 모달 */}
+        {isLoading && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="p-6 bg-gray-800 rounded-lg shadow-lg">
+              <div className="flex items-center justify-center">
+                <div className="w-8 h-8 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              <p className="mt-4 text-lg text-white text-center">Loading...</p>
+            </div>
+          </div>
+        )}
       </div>
       <Modal open={modalIsOpen} onClose={handleCloseModal}>
         {renderModalContent()}
