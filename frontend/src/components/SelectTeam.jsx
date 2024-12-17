@@ -183,7 +183,7 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
         alert("팀 이름을 확인해 주세요.");
         return;
       }
-      if (teamData.filter((team) => team.name === teamName)) {
+      if (teamData.filter((team) => team.name === teamName).length > 0) {
         alert("팀 이름이 존재합니다.");
         return;
       }
