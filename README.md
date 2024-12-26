@@ -20,6 +20,7 @@
 ### Frontend
 - **React Hooks**: `useEffect`, `useRef`, `useState`, `useMemo`
 - **CSS**: TailwindCSS
+- **State Management**: Redux Toolkit
 
 ### Backend
 - **Node.js**: Express Framework
