@@ -5,13 +5,17 @@ import SelectTeam from "./components/SelectTeam.jsx";
 import Header from "./components/Header.jsx";
 import WeeklyReportForm from "./components/WeeklyReportForm.jsx";
 import WeeklyReportList from "./components/WeeklyReportList.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { enterActions } from "./store/enter.js";
 
 function App() {
   const [teamSubmitData, setTeamSubmitData] = useState(false);
   const [submitTeamData, setSubmitTeamData] = useState(null);
-  const [teamIsSubmit, setTeamIsSubmit] = useState(false);
+  // const [teamIsSubmit, setTeamIsSubmit] = useState(false);
   const [heightApply, setHeightApply] = useState(0);
   const [fetchResult, setFetchResult] = useState(false);
+  const dispatch = useDispatch();
+  const isEnter = useSelector((state) => state.enter.isEntered);
 
   useEffect(() => {
     const data = window.localStorage.getItem("submitTeam");
@@ -23,8 +27,9 @@ function App() {
 
   const handleTeamSubmit = (submitTeam) => {
     setSubmitTeamData(submitTeam);
-    setTeamIsSubmit(true);
+    // setTeamIsSubmit(true);
     setTeamSubmitData(true);
+    dispatch(enterActions.enter());
   };
 
   const handleHeight = (headerHeight) => {
@@ -36,10 +41,11 @@ function App() {
   };
 
   const handleLeaveTeam = () => {
-    setTeamIsSubmit(false);
+    // setTeamIsSubmit(false);
+    dispatch(enterActions.exit());
   };
 
-  return teamSubmitData && teamIsSubmit && submitTeamData.team.name ? (
+  return teamSubmitData && isEnter && submitTeamData.team.name ? (
     <>
       <Header
         submitTeamData={submitTeamData}
