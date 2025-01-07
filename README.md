@@ -46,5 +46,8 @@
   - 작성된 보고서 리스트 형태로 표시
   - 작성된 보고서 리스트 수정/삭제 가능 (Node.js와 MongoDB의 Mongoose 이용)
 
+## 개헌할 점 
+- 처음 로드 시 팀 선택 API 호출 Response가 오래걸림
+- 사용자 수정 시 바뀌지 않음
 ## 문제 해결
 처음에 Vercel에 backend 소스와 frontend 소스를 같이 배포하려니 동작이 원활하지 않았습니다. 이를 해결하기 위해 backend와 frontend의 Root Directory를 각각 Vercel(frontend)과 Render(backend)에 배포하였고, 이로 인해 동작이 원활하게 되었습니다.
