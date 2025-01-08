@@ -225,11 +225,11 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
           return;
         }
         await updateTeam(identifier, teamName);
-        setSelectedUser((prev) => {
+        setSelectedTeam((prev) => {
           if (prev.teamId === identifier) {
             return {
               ...prev,
-              name: teamName,
+              name: assignTeam.current.value,
             };
           }
           return prev;
@@ -397,23 +397,26 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
               })}
             />
             {/* 이메일 입력 필드: action === "add"일 때만 렌더링 */}
-            {action === "add" && (
-              <>
-                <input
-                  type="email"
-                  placeholder="이메일을 입력하세요"
-                  className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  ref={assignUserEmail}
-                />
-                <div className="control-error">
-                  {emailIsInvalid && (
-                    <p className="mb-3 text-sm text-red-500">
-                      유효한 이메일 주소를 입력해주세요.
-                    </p>
-                  )}
-                </div>
-              </>
-            )}
+            {/* {action === "add" && ( */}
+            <div className={action !== "add" ? "hidden" : ""}>
+              <input
+                type="email"
+                placeholder="이메일을 입력하세요"
+                className="w-full p-2 mb-4 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                ref={assignUserEmail}
+                {...(action === "update" && {
+                  defaultValue: selectedUser?.email,
+                })}
+              />
+              <div className="control-error">
+                {emailIsInvalid && (
+                  <p className="mb-3 text-sm text-red-500">
+                    유효한 이메일 주소를 입력해주세요.
+                  </p>
+                )}
+              </div>
+            </div>
+            {/* )} */}
             <button
               onClick={
                 action === "add"
@@ -562,12 +565,12 @@ export default function SelectTeam({ handleTeamSubmit, handlefetchResult }) {
         </div>
         {/* 로딩 상태 모달 */}
         {isLoading && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="p-6  rounded-lg shadow-lg">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="p-6 rounded-lg shadow-lg">
               <div className="flex items-center justify-center">
-                <div className="w-8 h-8 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-4 border-blue-400 rounded-full border-t-transparent animate-spin"></div>
               </div>
-              <p className="mt-4 text-lg text-white text-center">Loading...</p>
+              <p className="mt-4 text-lg text-center text-white">Loading...</p>
             </div>
           </div>
         )}
